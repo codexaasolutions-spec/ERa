@@ -1,4 +1,4 @@
-﻿import {useEffect,useState} from 'react';
+import {useEffect,useState} from 'react';
 import {NavLink,useNavigate,Outlet} from 'react-router-dom';
 import {LayoutDashboard,UserCircle,WalletCards,ArrowDownToLine,Boxes,Users,Gift,TicketPercent,ReceiptText,LifeBuoy,Settings,Menu,X,LogOut,ShieldCheck,Bell,History,MessageCircle} from 'lucide-react';
 import {useAuth} from '../context/AuthContext';
@@ -73,6 +73,7 @@ export default function AppLayout(){
   };
 
   const handleLogout=()=>{
+    sessionStorage.removeItem('tm_whatsapp_join_seen');
     setShowWhatsAppJoin(false);
     logout();
     nav('/login');
