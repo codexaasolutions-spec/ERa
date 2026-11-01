@@ -17,10 +17,7 @@ import { initializeWallets } from './services/ledger.js';
 const app = express();
 app.set('trust proxy', 1);
 
-const cspDirectives = helmet.contentSecurityPolicy.getDefaultDirectives();
-cspDirectives['img-src'] = ["'self'", "data:", "blob:"];
-app.use(helmet({ contentSecurityPolicy: { directives: cspDirectives } }));
-
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.map(x => x.replace(/\/$/, '')).includes(origin.replace(/\/$/, ''))) {
@@ -130,4 +127,5 @@ const shutdown = async (signal: string) => {
 
 process.once('SIGINT', () => void shutdown('SIGINT'));
 process.once('SIGTERM', () => void shutdown('SIGTERM'));
+
 
