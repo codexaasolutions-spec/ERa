@@ -1,4 +1,4 @@
-import {formatMoney} from '../config/currency';
+﻿import {formatMoney} from '../config/currency';
 import AdminSupport from '../components/AdminSupport';
 import {FormEvent,ReactNode,useEffect,useState} from 'react';
 import {adminService} from '../services';
@@ -1144,7 +1144,7 @@ function ReviewDeposits({
               <small>{d.reference||'No reference'}</small>
             </td>
 
-            <td>{d.packageName||'—'}</td>
+            <td>{d.packageName||'â€”Ã‚Â'}</td>
 
             <td>{formatMoney(d.amount,currency)}</td>
 
