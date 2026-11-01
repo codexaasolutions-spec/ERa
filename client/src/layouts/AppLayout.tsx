@@ -90,7 +90,7 @@ export default function AppLayout(){
       <aside className={open?'sidebar open':'sidebar'} style={{height:"100vh",overflowY:"auto",overflowX:"hidden",overscrollBehavior:"contain"}}>
 
         <div className="brand">
-          <span>TM</span>
+          <span>LTC</span>
           <div>
             <b>LTC ERA</b>
           </div>
