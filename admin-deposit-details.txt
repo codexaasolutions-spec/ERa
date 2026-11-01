@@ -1,0 +1,744 @@
+﻿
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\layouts\AppLayout.tsx
+LineNumber : 17
+Line       :   ['/deposit-history','Deposit History',ReceiptText],
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Admin.tsx
+LineNumber : 806
+Line       :                 (t.transactionId+t.type)
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Admin.tsx
+LineNumber : 812
+Line       :                   <td>{t.transactionId}</td>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Admin.tsx
+LineNumber : 1092
+Line       :         await adminService.approveDeposit(id);
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Admin.tsx
+LineNumber : 1094
+Line       :         await adminService.rejectDeposit(id);
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Admin.tsx
+LineNumber : 1109
+Line       :       d.transactionId+
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Admin.tsx
+LineNumber : 1142
+Line       :               <b>{d.transactionId}</b>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Admin.tsx
+LineNumber : 1270
+Line       :       w.transactionId+
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Admin.tsx
+LineNumber : 1304
+Line       :               {w.transactionId}
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Deposit.tsx
+LineNumber : 147
+Line       :     nav('/deposit-history');
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Modules.tsx
+LineNumber : 47
+Line       : export function DepositHistory(){const currency=useCurrency();const 
+             [items,setItems]=useState<Deposit[]>([]),[q,setQ]=useState(''),[stat
+             us,setStatus]=useState(''),[error,setError]=useState('');const load=
+             ()=>{setError('');depositService.getDeposits().then(setItems).catch(
+             e=>setError(e.message||'Unable to load 
+             deposits.'))};useEffect(()=>{void load()},[]);const filtered=items.f
+             ilter(x=>(!status||x.status===status)&&(x.transactionId+x.method+(x.
+             packageName||'')+(x.reference||'')).toLowerCase().includes(q.toLower
+             Case()));return <Shell eyebrow="FUNDING" title="Deposit History" 
+             description="Track submitted deposits and their server-controlled 
+             verification state."><Card><div className="toolbar"><SearchBar 
+             value={q} onChange={setQ} placeholder="Search deposit ID, reference 
+             or method…"/><select value={status} 
+             onChange={e=>setStatus(e.target.value)}><option value="">All statuse
+             s</option><option>PENDING</option><option>PROCESSING</option><option
+             >COMPLETED</option><option>REJECTED</option><option>FAILED</option><
+             option>CANCELLED</option></select><Button variant="ghost" 
+             onClick={load}><RefreshCw 
+             size={14}/>Refresh</Button></div>{error&&<p 
+             className="error">{error}</p>}{filtered.length?<Table headers={['Tra
+             nsaction','Package','Amount','Method','Status','Date']}>{filtered.ma
+             p(d=><tr key={d._id}><td><b>{d.transactionId}</b><small>{d.reference
+             ||'—'}</small></td><td>{d.packageName||'—'}</td><td>{formatMoney(d.a
+             mount,currency)}</td><td>{d.method}</td><td><StatusBadge 
+             status={d.status}/></td><td>{new Date(d.createdAt).toLocaleDateStrin
+             g()}</td></tr>)}</Table>:<PageState type="empty" message="No 
+             deposits match your filters."/>}</Card></Shell>}
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Modules.tsx
+LineNumber : 55
+Line       :     [accountHolderName,setAccountHolderName]=useState(''),
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Modules.tsx
+LineNumber : 172
+Line       :         accountHolderName
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Modules.tsx
+LineNumber : 177
+Line       :       setAccountHolderName('');
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Modules.tsx
+LineNumber : 250
+Line       :               value={accountHolderName}
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Modules.tsx
+LineNumber : 251
+Line       :               onChange={e=>setAccountHolderName(e.target.value)}
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Modules.tsx
+LineNumber : 327
+Line       : export function WithdrawalHistory(){const 
+             currency=useCurrency();const [items,setItems]=useState<WithdrawalRec
+             ord[]>([]),[error,setError]=useState('');const 
+             load=async()=>{try{const data=await withdrawalService.getWithdrawals
+             ();setItems(data);setError('')}catch(e){const err=e as 
+             Error;setError(err.message||'Unable to load 
+             withdrawals.')}};useEffect(()=>{void load();const 
+             interval=window.setInterval(()=>{void 
+             load()},5000);return()=>window.clearInterval(interval)},[]);return 
+             <Shell eyebrow="PAYOUT" title="Withdrawal History" 
+             description="Review payout requests and their processing 
+             status."><Card>{error&&<p 
+             className="error">{error}</p>}{items.length?<Table headers={['Transa
+             ction','Amount','Fee','Net','Method','Status','Date']}>{items.map(w=
+             ><tr key={w._id}><td>{w.transactionId}</td><td>{formatMoney(w.amount
+             ,currency)}</td><td>{formatMoney(w.fee,currency)}</td><td>{formatMon
+             ey(w.netAmount,currency)}</td><td>{w.method}</td><td><StatusBadge 
+             status={w.status}/></td><td>{new Date(w.createdAt).toLocaleDateStrin
+             g()}</td></tr>)}</Table>:<PageState type="empty" message="No 
+             withdrawal requests yet."/>}</Card></Shell>}
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Modules.tsx
+LineNumber : 329
+Line       : export function Transactions(){const currency=useCurrency();const [i
+             tems,setItems]=useState<Transaction[]>([]),[q,setQ]=useState(''),[ty
+             pe,setType]=useState(''),[status,setStatus]=useState(''),[error,setE
+             rror]=useState(''),[loading,setLoading]=useState(true);const 
+             requestSeq=useRef(0);const load=()=>{const seq=++requestSeq.current;
+             setLoading(true);setError('');transactionService.getTransactions({q,
+             type,status}).then(rows=>{if(seq===requestSeq.current)setItems(rows)
+             }).catch(e=>{if(seq===requestSeq.current)setError(e.message||'Unable
+              to load transactions.')}).finally(()=>{if(seq===requestSeq.current)
+             setLoading(false)})};useEffect(()=>{const 
+             timer=window.setTimeout(()=>{void load()},300);return()=>window.clea
+             rTimeout(timer)},[q,type,status]);return <Shell eyebrow="LEDGER" 
+             title="Transaction History" description="Unified, traceable 
+             financial events returned by the ledger service."><Card><div 
+             className="toolbar"><SearchBar value={q} onChange={setQ} 
+             placeholder="Search transaction…"/><div 
+             className="filter-row"><select value={type} 
+             onChange={e=>setType(e.target.value)}><option value="">All types</op
+             tion>{['DEPOSIT','PACKAGE_PURCHASE','PACKAGE_INCOME','WITHDRAWAL','W
+             ITHDRAWAL_FEE','COMMISSION','REWARD','PROMO_REWARD','ADJUSTMENT','RE
+             FUND','REVERSAL'].map(x=><option key={x} 
+             value={x}>{x}</option>)}</select><select value={status} 
+             onChange={e=>setStatus(e.target.value)}><option value="">All statuse
+             s</option>{['COMPLETED','PENDING','PROCESSING','REJECTED','APPROVED'
+             ,'FAILED'].map(x=><option key={x} 
+             value={x}>{x}</option>)}</select></div><Button variant="ghost" 
+             onClick={load}><RefreshCw 
+             size={14}/>Refresh</Button></div>{error&&<p 
+             className="error">{error}</p>}{loading&&items.length===0?<div 
+             className="skeleton" 
+             style={{height:180,width:'100%'}}/>:items.length?<Table headers={['I
+             D','Type','Amount','Fee','Net','Status','Date']}>{items.map(t=><tr k
+             ey={t._id}><td><b>{t.transactionId}</b><small>{t.description||'Ledge
+             r event'}</small></td><td>{t.type}</td><td>{formatMoney(t.amount,cur
+             rency)}</td><td>{formatMoney(t.fee,currency)}</td><td>{formatMoney(t
+             .netAmount,currency)}</td><td><StatusBadge 
+             status={t.status}/></td><td>{new Date(t.createdAt).toLocaleDateStrin
+             g()}</td></tr>)}</Table>:<PageState type="empty" message="No 
+             transactions found."/>}</Card></Shell>}
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Modules.tsx
+LineNumber : 456
+Line       :                 {isExpanded?'Collapse':'View details'}
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 282
+Line       :         transactionId:nowId('DEP'),
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 296
+Line       :         transactionId:created.transactionId,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 302
+Line       :         reference:created.transactionId,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 395
+Line       :       accountHolderName:string
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 429
+Line       :         transactionId:nowId('WDR'),
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 437
+Line       :         accountHolderName:input.accountHolderName,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 447
+Line       :         transactionId:w.transactionId,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 453
+Line       :         reference:w.transactionId,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 460
+Line       :           transactionId:`${w.transactionId}-FEE`,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 466
+Line       :           reference:`${w.transactionId}-FEE`,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 528
+Line       :               t.transactionId+
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 751
+Line       :         transactionId:nowId('REWARD'),
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 936
+Line       :       transactionId:nowId('PROMO'),
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 1293
+Line       :   approveDeposit:async(id:string)=>{
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 1345
+Line       :             t.reference===d.transactionId&&
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 1355
+Line       :           transactionId:d.transactionId,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 1361
+Line       :           reference:d.transactionId,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 1385
+Line       :   rejectDeposit:async(id:string)=>{
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 1403
+Line       :           t.reference===d.transactionId&&
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 1502
+Line       :             t.reference===w.transactionId||
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 1503
+Line       :             t.reference===`${w.transactionId}-FEE`
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 1558
+Line       :             t.reference===w.transactionId||
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\index.ts
+LineNumber : 1559
+Line       :             t.reference===`${w.transactionId}-FEE`
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\mock.ts
+LineNumber : 25
+Line       : export const transactions:Transaction[]=[{_id:'t1',transactionId:'DE
+             P-DEMO-001',type:'DEPOSIT',amount:50,fee:0,netAmount:50,status:'COMP
+             LETED',reference:'DEMO-REF',description:'Demo deposit',createdAt:iso
+             (-2*864e5)},{_id:'t2',transactionId:'INC-DEMO-001',type:'PACKAGE_INC
+             OME',amount:2,fee:0,netAmount:2,status:'COMPLETED',description:'Demo
+              package income illustration',createdAt:iso(-864e5)},{_id:'t3',trans
+             actionId:'COM-DEMO-001',type:'COMMISSION',amount:1.5,fee:0,netAmount
+             :1.5,status:'COMPLETED',description:'Demo referral 
+             commission',createdAt:iso(-5e6)}];
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\mock.ts
+LineNumber : 26
+Line       : export const deposits:Deposit[]=[{_id:'d1',transactionId:'DEP-DEMO-0
+             01',amount:50,status:'COMPLETED',method:'BEP20',packageId:'p5',packa
+             geName:'Luxury House',reference:'DEMO-REF',createdAt:iso(-2*864e5)},
+             {_id:'d2',transactionId:'DEP-DEMO-002',amount:10,status:'PENDING',me
+             thod:'Easypaisa',packageId:'p3',packageName:'Family 
+             House',reference:'PENDING-REF',createdAt:iso(-4e5)}];
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\services\mock.ts
+LineNumber : 28
+Line       : export const withdrawals:Withdrawal[]=[{_id:'w1',transactionId:'WDR-
+             DEMO-001',amount:20,fee:1.6,netAmount:18.4,method:'BEP20',account:'0
+             x••••••demo',accountHolderName:'Demo 
+             Member',status:'PENDING',createdAt:iso(-6e5)}];
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\types\index.ts
+LineNumber : 6
+Line       : export interface Commission{_id:string;userId:string;sourceUserId:st
+             ring;level:number;rate:number;amount:number;transactionId:string;}
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\types\index.ts
+LineNumber : 11
+Line       : export interface Deposit{_id:string;transactionId:string;amount:numb
+             er;status:Status;method:string;packageId?:string;packageName?:string
+             ;reference?:string;proofUrl?:string;createdAt:string;}
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\types\index.ts
+LineNumber : 12
+Line       : export interface Withdrawal{_id:string;transactionId:string;amount:n
+             umber;fee:number;netAmount:number;method:string;account:string;accou
+             ntHolderName:string;status:Status;createdAt:string;reservedAmount?:n
+             umber;idempotencyKey?:string;}
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\types\index.ts
+LineNumber : 13
+Line       : export interface Transaction{_id:string;transactionId:string;type:Tr
+             ansactionType;amount:number;fee:number;netAmount:number;status:Statu
+             s;reference?:string;description?:string;createdAt:string;}
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 13
+Line       :   DepositHistory,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 49
+Line       :               <Route path="/deposit-history" 
+             element={<DepositHistory/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 620
+Line       :               transactionId:
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 657
+Line       :               d.transactionId ??
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 691
+Line       :                   existingFallback.transactionId,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 712
+Line       :                   existingFallback.transactionId ??
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 736
+Line       :                 transactionId:
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 767
+Line       :                 created.transactionId ??
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 861
+Line       :       transactionId: d.transactionId,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 961
+Line       :                 done.transactionId,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 1012
+Line       :                   `RECOVERED-${done.transactionId}`,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 1036
+Line       :             String(done.transactionId),
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 1189
+Line       :               d.transactionId,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 1233
+Line       :         String(d.transactionId),
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 1434
+Line       :                     d.transactionId,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 1635
+Line       :                 done.transactionId,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 1690
+Line       :                 `RECOVERED-${done.transactionId}`,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 1945
+Line       :       accountHolderName
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 2013
+Line       :     const holderName = String(accountHolderName || '').trim();
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 2074
+Line       :               transactionId:
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 2094
+Line       :               accountHolderName:
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 2133
+Line       :               w.transactionId ??
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 2173
+Line       :                 `${w.transactionId}-FEE`,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 2223
+Line       :                 transactionId:
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 2273
+Line       :                 created.transactionId ??
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 2309
+Line       :                   `${created.transactionId}-FEE`,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 2359
+Line       :                           created.transactionId
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 2539
+Line       :           transactionId:
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 3750
+Line       :               d.transactionId,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 3851
+Line       :                 current.transactionId,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 4610
+Line       :               `^${escapeRegex(String(w.transactionId))}`
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 4809
+Line       :               `^${escapeRegex(String(w.transactionId))}`
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 5030
+Line       :                     w.transactionId
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 5188
+Line       :                       current.transactionId
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 5345
+Line       :                     w.transactionId
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\controllers\core.ts
+LineNumber : 5474
+Line       :                       current.transactionId
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\models\index.ts
+LineNumber : 7
+Line       : export const Deposit=model('Deposit',new Schema({transactionId:{type
+             :String,unique:true},userId:{type:Schema.Types.ObjectId,ref:'User',r
+             equired:true,index:true},packageId:{type:Schema.Types.ObjectId,ref:'
+             Package',required:true,index:true},amount:{type:Number,required:true
+             },method:{type:String,required:true},reference:{type:String,required
+             :true,unique:true,sparse:true},proofUrl:String,status:{type:String,e
+             num:['PENDING','PROCESSING','COMPLETED','REJECTED','FAILED','CANCELL
+             ED'],default:'PENDING',index:true},verifiedAt:Date,verifiedBy:{type:
+             Schema.Types.ObjectId,ref:'User'}},{...opts,indexes:[{userId:1,creat
+             edAt:-1},{status:1,createdAt:-1}]}));
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\models\index.ts
+LineNumber : 8
+Line       : export const Withdrawal=model('Withdrawal',new Schema({transactionId
+             :{type:String,unique:true},userId:{type:Schema.Types.ObjectId,ref:'U
+             ser',required:true,index:true},amount:{type:Number,required:true},fe
+             e:{type:Number,required:true},netAmount:{type:Number,required:true},
+             method:{type:String,required:true},account:{type:String,required:tru
+             e},accountHolderName:{type:String,required:true,trim:true},status:{t
+             ype:String,enum:['PENDING','PROCESSING','APPROVED','REJECTED','COMPL
+             ETED','FAILED'],default:'PENDING',index:true},approvedBy:{type:Schem
+             a.Types.ObjectId,ref:'User'},rejectedBy:{type:Schema.Types.ObjectId,
+             ref:'User'},processedAt:Date,reference:String,idempotencyKey:{type:S
+             tring,unique:true,sparse:true},reservedAmount:{type:Number,required:
+             true,min:0}},{...opts,indexes:[{userId:1,createdAt:-1},{status:1,cre
+             atedAt:-1}]}));
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\models\index.ts
+LineNumber : 9
+Line       : export const Transaction=model('Transaction',new Schema({transaction
+             Id:{type:String,unique:true},userId:{type:Schema.Types.ObjectId,ref:
+             'User',required:true,index:true},type:{type:String,enum:['DEPOSIT','
+             PACKAGE_PURCHASE','PACKAGE_INCOME','WITHDRAWAL','WITHDRAWAL_FEE','CO
+             MMISSION','REWARD','PROMO_REWARD','ADJUSTMENT','REFUND','REVERSAL'],
+             required:true,index:true},amount:{type:Number,required:true},fee:{ty
+             pe:Number,default:0},netAmount:{type:Number},status:{type:String,ind
+             ex:true},reference:{type:String,index:true},description:String,relat
+             edEntity:String,metadata:Schema.Types.Mixed},{...opts,indexes:[{user
+             Id:1,createdAt:-1},{type:1,status:1,createdAt:-1},{reference:1},{'me
+             tadata.idempotencyKey':1,unique:true,sparse:true}]}));
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\models\index.ts
+LineNumber : 10
+Line       : export const Commission=model('Commission',new Schema({userId:{type:
+             Schema.Types.ObjectId,ref:'User',required:true,index:true},sourceUse
+             rId:{type:Schema.Types.ObjectId,ref:'User',required:true,index:true}
+             ,level:{type:Number,required:true},rate:{type:Number,required:true},
+             amount:{type:Number,required:true},transactionId:{type:String,index:
+             true}},{...opts,indexes:[{userId:1,level:1},{sourceUserId:1,level:1,
+             transactionId:1,unique:true}]}));
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\services\incomeService.ts
+LineNumber : 147
+Line       :         String(income.transactionId ?? ''),
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\services\ledger.ts
+LineNumber : 112
+Line       :   const tx=await Transaction.create([{transactionId:txid('LED'),fee,
+             netAmount,...data}],{session}).then(rows=>rows[0]);
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\services\referralService.ts
+LineNumber : 8
+Line       : async function createCommissionsInSession(sourceUserId:string,baseAm
+             ount:number,sourceReference:string,session:ClientSession){const 
+             settings=await getSettings();const rates=(settings.commissionRates||
+             [10,2,1,1]).slice(0,4).map(Number);const chain=await 
+             getUpline(sourceUserId,4,session);const created=[];for(const u of 
+             chain){const 
+             rate=Number(rates[u.level-1]||0);if(rate<=0)continue;const amount=Nu
+             mber((baseAmount*rate/100).toFixed(8));if(amount<=0)continue;const 
+             exists=await Commission.findOne({sourceUserId,level:u.level,transact
+             ionId:sourceReference}).session(session);if(exists)continue;let 
+             c;try{c=(await Commission.create([{userId:new mongoose.Types.ObjectI
+             d(String(u.userId)),sourceUserId,level:u.level,rate,amount,transacti
+             onId:sourceReference}],{session}))[0]}catch(e:unknown){if((e as 
+             {code?:number})?.code===11000)continue;throw e}await ledger({userId:
+             String(u.userId),type:'COMMISSION',amount,status:'COMPLETED',referen
+             ce:`COM-${sourceReference}-L${u.level}`,metadata:{commissionId:Strin
+             g(c._id),sourceReference,level:u.level,idempotencyKey:`commission:${
+             sourceReference}:${u.level}`}},session);created.push(c)}return 
+             created}
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\src\validators\index.ts
+LineNumber : 9
+Line       : export const withdrawalSchema=z.object({amount:z.coerce.number().pos
+             itive(),method:z.string().trim().min(1).max(50),account:z.string().t
+             rim().min(2).max(200),accountHolderName:z.string().trim().min(2).max
+             (120)});
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 440
+Line       :     await Transaction.deleteMany({reference:created.body.deposit.tra
+             nsactionId,type:'DEPOSIT'});
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 948
+Line       :         transactionId: 'SRC-CONCURRENT',
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 996
+Line       :         accountHolderName: 'Test Member',
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 1077
+Line       :         `^${r.body.withdrawal.transactionId}`,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 1119
+Line       :         accountHolderName: 'Test Member',
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 1132
+Line       :           r.body.withdrawal.transactionId,
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 1182
+Line       :               accountHolderName: 'Test Member',
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 1232
+Line       :         accountHolderName: 'Test Member',
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 1294
+Line       :       amount: 50, method: 'TEST', account: 'acct', 
+             accountHolderName: 'Test Member',
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 1332
+Line       :         accountHolderName: 'Test Member',
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 1352
+Line       :       amount: 40, method: 'TEST', account: 'acct', 
+             accountHolderName: 'Test Member',
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 1364
+Line       :     const first = await call(createWithdrawal, String(u._id), { 
+             amount: 20, method: 'TEST', account: 'acct', accountHolderName: 
+             'Test Member' }, { 'idempotency-key': 'ROLLING-1' });
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 1366
+Line       :     const second = await call(createWithdrawal, String(u._id), { 
+             amount: 10, method: 'TEST', account: 'acct2', accountHolderName: 
+             'Test Member' }, { 'idempotency-key': 'ROLLING-2' });
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 1373
+Line       :     const r = await call(createWithdrawal, String(u._id), { amount: 
+             20, method: 'TEST', account: 'acct', accountHolderName: 'Test 
+             Member' }, { 'idempotency-key': 'AFTER-HOURS' });
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 1708
+Line       :         accountHolderName: 'Test Member',
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 1716
+Line       :       reference: new 
+             RegExp(`^${created.body.withdrawal.transactionId}`),
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 1723
+Line       :       reference: new 
+             RegExp(`^${created.body.withdrawal.transactionId}`),
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 1728
+Line       :       reference: new 
+             RegExp(`^${created.body.withdrawal.transactionId}`),
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\se
+             rver\tests\financial.test.ts
+LineNumber : 1733
+Line       :       reference: new 
+             RegExp(`^${created.body.withdrawal.transactionId}`),
+
+
+

@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us | Trust-Mine</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1220;color:#e5e7eb;font-family:Arial,sans-serif;line-height:1.75}
+header{background:#111c30;padding:22px 7%;border-bottom:1px solid #263650}
+header a{color:#fff;text-decoration:none;font-weight:bold;font-size:22px}
+nav{display:flex;flex-wrap:wrap;gap:18px;margin-top:12px}
+nav a{color:#a9c5e8;text-decoration:none;font-size:14px}
+main{max-width:900px;margin:45px auto;padding:35px;background:#111c30;border:1px solid #263650;border-radius:14px}
+h1{color:#fff;font-size:32px;line-height:1.3}
+h2{color:#8fc5ff;margin-top:28px}
+p,li{color:#cbd5e1}
+footer{text-align:center;padding:25px;color:#8293aa;font-size:13px}
+a{color:#8fc5ff}
+</style>
+</head>
+<body>
+<header>
+<a href="/">Trust-Mine</a>
+<nav>
+<a href="/about-us.html">About Us</a>
+<a href="/privacy-policy.html">Privacy Policy</a>
+<a href="/terms-and-conditions.html">Terms &amp; Conditions</a>
+<a href="/refund-policy.html">Payment &amp; Refund Policy</a>
+</nav>
+</header>
+<main>
+<h1>About Trust-Mine</h1>
+<p><strong>Welcome to Trust-Mine</strong> — a digital platform focused on learning, knowledge sharing and accessible online resources.</p>
+
+<h2>Our Purpose</h2>
+<p>Our purpose is to provide users with an organised digital environment where they can explore educational information, develop their understanding and access the services made available through the platform.</p>
+
+<h2>Learning and Development</h2>
+<p>We value continuous learning, responsible use of technology and informed decision-making. We encourage users to review available information carefully and use educational resources as a starting point for their own learning.</p>
+
+<h2>Transparency and Responsibility</h2>
+<p>We aim to communicate our platform features, applicable charges and user responsibilities clearly. Where account packages or payment-related features are available, users should review the relevant conditions before using them.</p>
+
+<h2>Our Commitment</h2>
+<p>We strive to maintain a respectful, accessible and responsible online experience. We do not promise guaranteed earnings, financial returns or specific outcomes from using educational materials or platform services.</p>
+</main>
+<footer>© 2026 Trust-Mine. All rights reserved.</footer>
+</body>
+</html>

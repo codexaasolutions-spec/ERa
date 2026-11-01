@@ -1,0 +1,434 @@
+﻿
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\layouts\AppLayout.tsx
+LineNumber : 2
+Line       : import {NavLink,useNavigate,Outlet} from 'react-router-dom';
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\layouts\AppLayout.tsx
+LineNumber : 34
+Line       :   const nav=useNavigate();
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Auth.tsx
+LineNumber : 2
+Line       : import {useNavigate,Link,useSearchParams} from 'react-router-dom';
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Auth.tsx
+LineNumber : 52
+Line       :   const nav=useNavigate();
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Auth.tsx
+LineNumber : 101
+Line       :   const nav=useNavigate();
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Dashboard.tsx
+LineNumber : 1
+Line       : import {useEffect,useState} from 'react';import {ArrowDownToLine,Arr
+             owUpFromLine,Boxes,Users,Wallet,TrendingUp,Gift,Clock3} from 
+             'lucide-react';import {dashboardService,packageService} from 
+             '../services';import 
+             {Card,StatCard,StatusBadge,Button,PageState,Progress} from 
+             '../components/ui';import 
+             {DashboardData,PlatformSettings,PackagePlan} from '../types';import 
+             {useNavigate} from 'react-router-dom';import {formatMoney} from 
+             '../config/currency';
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Dashboard.tsx
+LineNumber : 2
+Line       : export default function Dashboard(){const 
+             [data,setData]=useState<DashboardData|null>(null);const 
+             [plans,setPlans]=useState<PackagePlan[]>([]);const 
+             [settings,setSettings]=useState<PlatformSettings|null>(null);const 
+             [error,setError]=useState(false);const nav=useNavigate();const load=
+             ()=>{setError(false);dashboardService.getDashboard().then(d=>[d,d.se
+             ttings]).then(([d,s])=>{setData(d);setSettings(s)}).catch(()=>setErr
+             or(true))};useEffect(()=>{void load();packageService.getPackages().t
+             hen(setPlans).catch(()=>setPlans([]))},[]);if(error)return <div 
+             className="page"><PageState type="error" message="Dashboard data 
+             could not be loaded." 
+             onRetry={load}/></div>;if(!data||!settings)return <div 
+             className="page"><div className="page-head"><div><span 
+             className="eyebrow">OVERVIEW</span><h1>Dashboard</h1><p>Monitor 
+             balances, packages and platform activity.</p></div><div 
+             className="actions"><Button 
+             onClick={()=>nav('/deposit')}>Deposit</Button><Button 
+             variant="ghost" 
+             onClick={()=>nav('/withdrawal')}>Withdraw</Button></div></div><div 
+             className="stats stats-6">{['Available Balance','Total 
+             Deposit','Total Income','Active Packages','Team 
+             Members','Rewards'].map(label=><Card key={label}><div 
+             className="skeleton" 
+             style={{height:18,width:'55%',marginBottom:10}}/><div 
+             className="skeleton" 
+             style={{height:28,width:'70%'}}/></Card>)}</div><section 
+             className="home-packages"><div className="page-head"><div><span 
+             className="eyebrow">CloudEra</span><h1>Available 
+             Packages</h1><p>Explore package plans and their daily 
+             configuration.</p></div><Button variant="ghost" 
+             onClick={()=>nav('/packages')}>All Packages</Button></div><div class
+             Name="package-grid">{plans.filter(p=>p.status==='ACTIVE'||p.isActive
+             ).slice(0,6).map(p=><Card className="package" key={p._id}><div 
+             className="package-top"><span className="mini">PACKAGE 
+             PLAN</span><StatusBadge 
+             status={p.status}/></div><h2>{p.name}</h2><strong className="price">
+             {formatMoney(p.amount,settings.currency)}</strong><p>{p.description}
+             </p><div className="rule"><span>Daily configuration</span><b>{format
+             Money(p.incomeConfiguration.daily,settings.currency)}</b></div><div 
+             className="package-foot"><span>{p.cycleDays}-day 
+             duration</span></div><Button 
+             onClick={()=>nav(`/deposit?packageId=${p._id}`)}>Deposit & 
+             Activate</Button></Card>)}</div></section><div 
+             className="grid2"><Card><div className="skeleton" 
+             style={{height:22,width:'40%',marginBottom:18}}/><div 
+             className="skeleton" 
+             style={{height:120,width:'100%'}}/></Card><Card><div 
+             className="skeleton" 
+             style={{height:22,width:'40%',marginBottom:18}}/><div 
+             className="skeleton" 
+             style={{height:120,width:'100%'}}/></Card></div></div>;const 
+             pkg=data.activePackagePurchases[0];const lifetimeEnd=pkg?new 
+             Date(pkg.cycleEnd).getTime():0;const progress=pkg?((Date.now()-new 
+             Date(pkg.cycleStart).getTime())/(lifetimeEnd-new 
+             Date(pkg.cycleStart).getTime()))*100:0;return <div 
+             className="page"><div className="page-head"><div><span 
+             className="eyebrow">OVERVIEW</span><h1>Dashboard</h1><p>Monitor 
+             balances, packages and platform activity.</p></div><div 
+             className="actions"><Button 
+             onClick={()=>nav('/deposit')}><ArrowDownToLine 
+             size={17}/>Deposit</Button><Button variant="ghost" 
+             onClick={()=>nav('/withdrawal')}><ArrowUpFromLine 
+             size={17}/>Withdraw</Button></div></div><div className="stats 
+             stats-6"><StatCard label="Available Balance" 
+             value={formatMoney(data.availableBalance,settings.currency)} 
+             icon={<Wallet/>}/><StatCard label="Total Deposit" 
+             value={formatMoney(data.totalDeposit,settings.currency)} 
+             icon={<ArrowDownToLine/>}/><StatCard label="Total Income" 
+             value={formatMoney(data.income,settings.currency)} 
+             icon={<TrendingUp/>}/><StatCard label="Active Packages" 
+             value={data.activePackages} icon={<Boxes/>}/><StatCard label="Team 
+             Members" value={data.team} icon={<Users/>}/><StatCard 
+             label="Rewards" value={formatMoney(data.rewards,settings.currency)} 
+             icon={<Gift/>}/></div><div className="grid2"><Card><div 
+             className="card-head"><div><h3>Active package</h3><span>Cycle timer 
+             is display-only; backend remains the source of 
+             truth.</span></div><StatusBadge 
+             status={pkg?.status||'EMPTY'}/></div>{pkg?<><div className="package-
+             summary"><div><span>Package</span><b>{pkg.packageName}</b></div><div
+             ><span>Amount</span><b>{formatMoney(pkg.packageAmount,settings.curre
+             ncy)}</b></div><div><span>Cycle</span><b>#{pkg.currentCycle}</b></di
+             v><div><span>Accrued</span><b>{formatMoney(pkg.accruedAmount,setting
+             s.currency)}</b></div></div><Progress value={progress}/><div 
+             className="cycle-meta"><span>{new 
+             Date(pkg.cycleStart).toLocaleString()}</span><span><Clock3 
+             size={13}/> {Math.max(0,Math.round((new 
+             Date(pkg.cycleEnd).getTime()-Date.now())/36e5))}h 
+             remaining</span></div></>:<div className="empty">No active packages 
+             yet. Choose a package to begin the deposit flow.</div>}<Button 
+             variant="ghost" onClick={()=>nav('/packages')}>View 
+             packages</Button></Card><Card><div 
+             className="card-head"><div><h3>Income 
+             activity</h3><span>Illustrative ledger 
+             visualization</span></div><div 
+             className="tabs"><button>7D</button><button className="selected">30D
+             </button><button>All</button></div></div><div className="bar-chart">
+             {[38,62,45,72,55,82,68,88,64,76,51,92].map((v,i)=><i key={i} 
+             style={{height:`${v}%`}}/>)}</div><div 
+             className="chart-note">Today: 
+             <b>{formatMoney(data.todayIncome,settings.currency)}</b> · 
+             Commission: <b>{formatMoney(data.commission,settings.currency)}</b><
+             /div></Card></div><div className="grid2"><Card><div 
+             className="card-head"><div><h3>Quick actions</h3><span>Common 
+             account actions</span></div></div><div 
+             className="quick-grid"><button 
+             onClick={()=>nav('/packages')}><Boxes/>Package 
+             Plans</button><button onClick={()=>nav('/team')}><Users/>My 
+             Team</button><button 
+             onClick={()=>nav('/rewards')}><Gift/>Rewards</button><button 
+             onClick={()=>nav('/promo')}><TrendingUp/>Promo 
+             Code</button></div></Card><Card><div 
+             className="card-head"><div><h3>Recent transactions</h3><span>Latest 
+             confirmed and pending ledger events</span></div><Button 
+             variant="ghost" onClick={()=>nav('/transactions')}>View 
+             all</Button></div><div 
+             className="list">{data.transactions.slice(0,5).map(t=><div 
+             className="list-row" key={t._id}><div><b>{t.type}</b><small>{new Dat
+             e(t.createdAt).toLocaleString()}</small></div><strong>{t.type==='WIT
+             HDRAWAL'?'âˆ’':'+'}{formatMoney(t.amount,settings.currency)}</strong
+             ><StatusBadge status={t.status}/></div>)}</div></Card></div></div>}
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Deposit.tsx
+LineNumber : 2
+Line       : import {useSearchParams,useNavigate} from 'react-router-dom';
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Deposit.tsx
+LineNumber : 27
+Line       :  const nav=useNavigate();
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Deposit.tsx
+LineNumber : 48
+Line       :    packageService.getPackages(),
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Modules.tsx
+LineNumber : 2
+Line       : import {useNavigate} from 'react-router-dom';
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Modules.tsx
+LineNumber : 45
+Line       : export function PackageDetails({id}:{id:string}){const 
+             currency=useCurrency();const 
+             [cycleHours,setCycleHours]=useState(24);useEffect(()=>{void getCache
+             dSettings().then(x=>setCycleHours(Number(x.cycleIntervalHours||24)))
+             .catch(()=>undefined)},[]);const [p,setP]=useState<PackagePlan|null>
+             (null),[error,setError]=useState('');const nav=useNavigate();const l
+             oad=()=>{setError('');packageService.getPackage(id).then(v=>{if(v)se
+             tP(v);else setError('Package not 
+             found.')}).catch(e=>setError(e.message||'Unable to load 
+             package.'))};useEffect(()=>{void load()},[id]);if(error)return 
+             <Shell eyebrow="PACKAGE" title="Package details" description="The 
+             requested package could not be loaded."><PageState type="error" 
+             message={error} onRetry={load}/></Shell>;if(!p)return <Shell 
+             eyebrow="PACKAGE" title="Package details" description="Package 
+             configuration"><Card><div className="detail-hero"><span 
+             className="mini">{cycleHours}-HOUR CYCLE</span><strong>Package 
+             details</strong><p className="muted-copy">Package information is 
+             loading in the background.</p></div></Card></Shell>;return <Shell 
+             eyebrow="PACKAGE" title={p.name} description="Review the 
+             server-configured package before starting the deposit flow."><div 
+             className="detail-grid"><Card><div className="detail-hero"><span 
+             className="mini">{cycleHours}-HOUR CYCLE</span><StatusBadge status={
+             p.status}/><strong>{formatMoney(p.amount,currency)}</strong><p>{p.de
+             scription}</p></div><div className="metric-grid"><div><span>Daily co
+             nfiguration</span><b>{formatMoney(p.incomeConfiguration.daily,curren
+             cy)}</b></div><div><span>Package duration</span><b>{p.cycleDays} 
+             days</b></div><div><span>Sort 
+             order</span><b>#{p.sortOrder}</b></div></div><Button 
+             disabled={p.status!=='ACTIVE'} 
+             onClick={()=>nav(`/deposit?packageId=${p._id}`)}>Deposit & Activate 
+             <ArrowRight size={15}/></Button></Card></div></Shell>}
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Packages.tsx
+LineNumber : 1
+Line       : import {useEffect,useState} from 'react';import {useNavigate} from 
+             'react-router-dom';import {packageService,settingsService} from 
+             '../services';import {PackagePlan,PlatformSettings} from 
+             '../types';import {Button,Card,PageState,StatusBadge} from 
+             '../components/ui';import {ArrowRight,Search} from 
+             'lucide-react';import {formatMoney} from '../config/currency';
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\pages\Packages.tsx
+LineNumber : 2
+Line       : export default function Packages(){const [plans,setPlans]=useState<P
+             ackagePlan[]>([]),[q,setQ]=useState(''),[loading,setLoading]=useStat
+             e(true),[error,setError]=useState(false),[settings,setSettings]=useS
+             tate<PlatformSettings|null>(null);const nav=useNavigate();const load
+             =()=>{setError(false);setLoading(true);Promise.all([packageService.g
+             etPackages(),settingsService.getSettings()]).then(([p,s])=>{setPlans
+             (p);setSettings(s);setError(false)}).catch(()=>setError(true)).final
+             ly(()=>setLoading(false))};useEffect(()=>{void load()},[]);const fil
+             tered=plans.filter(p=>p.name.toLowerCase().includes(q.toLowerCase())
+             );return <div className="page"><div 
+             className="page-head"><div><span 
+             className="eyebrow">PACKAGES</span><h1>Package 
+             Plans</h1><p>Database-driven plans. Any number of packages can be 
+             returned by the future backend.</p></div><div 
+             className="search-wrap"><Search size={16}/><input value={q} 
+             onChange={e=>setQ(e.target.value)} placeholder="Search 
+             packages…"/></div></div>{loading?<PageState type="loading" 
+             message="Loading package catalog."/>:error?<PageState type="error" 
+             message="Package catalog could not be loaded." 
+             onRetry={load}/>:filtered.length===0?<PageState type="empty" 
+             message="No package plans match your search."/>:<div 
+             className="package-grid">{filtered.map(p=><Card className="package" 
+             key={p._id}><div className="package-top"><span 
+             className="mini">{settings?.cycleIntervalHours||24}-HOUR 
+             CYCLE</span><StatusBadge 
+             status={p.status}/></div><h2>{p.name}</h2><strong className="price">
+             {formatMoney(p.amount,settings?.currency||'PKR')}</strong><p>{p.desc
+             ription}</p><div className="rule"><span>Daily configuration</span><b
+             >{formatMoney(p.incomeConfiguration.daily,settings?.currency||'PKR')
+             }</b></div><div className="package-foot"><span>{p.cycleDays}-day 
+             package duration</span><button className="text-btn" 
+             onClick={()=>nav(`/packages/${p._id}`)}>Details <ArrowRight 
+             size={14}/></button></div><Button 
+             onClick={()=>nav(`/deposit?packageId=${p._id}`)}>Deposit & 
+             Activate</Button></Card>)}</div>}</div>}
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\routes\Protected.tsx
+LineNumber : 1
+Line       : import {Navigate,Outlet} from 'react-router-dom';
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\routes\Protected.tsx
+LineNumber : 8
+Line       :   return <Navigate to="/login" replace/>;
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\routes\Protected.tsx
+LineNumber : 15
+Line       :   return <Navigate to="/dashboard" replace/>;
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 1
+Line       : import {BrowserRouter,Routes,Route,Navigate,useParams} from 
+             'react-router-dom';
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 37
+Line       :         <Routes>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 38
+Line       :           <Route path="/login" element={<LoginPage/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 39
+Line       :           <Route path="/register" element={<Register/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 40
+Line       :           <Route path="/forgot-password" 
+             element={<ForgotPassword/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 41
+Line       :           <Route path="/reset-password" element={<ResetPassword/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 43
+Line       :           <Route element={<Protected/>}>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 44
+Line       :             <Route element={<AppLayout/>}>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 45
+Line       :               <Route path="/dashboard" element={<Dashboard/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 46
+Line       :               <Route path="/packages" element={<Packages/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 47
+Line       :               <Route path="/packages/:id" 
+             element={<PackageDetailsRoute/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 48
+Line       :               <Route path="/deposit" element={<Deposit/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 49
+Line       :               <Route path="/deposit-history" 
+             element={<DepositHistory/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 50
+Line       :               <Route path="/withdrawal" element={<Withdrawal/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 51
+Line       :               <Route path="/withdrawal-history" 
+             element={<WithdrawalHistory/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 52
+Line       :               <Route path="/team" element={<Team/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 53
+Line       :               <Route path="/rewards" element={<Rewards/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 54
+Line       :               <Route path="/promo" element={<Promo/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 55
+Line       :               <Route path="/transactions" 
+             element={<Transactions/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 56
+Line       :               <Route path="/profile" element={<Profile/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 57
+Line       :               <Route path="/settings" element={<Settings/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 58
+Line       :               <Route path="/notifications" 
+             element={<Notifications/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 59
+Line       :               <Route path="/activity" element={<Activity/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 60
+Line       :               <Route path="/support" element={<Support/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 62
+Line       :               <Route element={<AdminOnly/>}>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 63
+Line       :                 <Route path="/admin" element={<Admin/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 68
+Line       :           <Route path="/" element={<Navigate to="/dashboard" 
+             replace/>}/>
+
+Path       : C:\Users\LENOVO\Downloads\Trust-Mine-main-updated\Trust-Mine-main\cl
+             ient\src\App.tsx
+LineNumber : 69
+Line       :           <Route path="*" element={<Navigate to="/dashboard" 
+             replace/>}/>
+
+
+

@@ -1,0 +1,298 @@
+﻿
+===== client\src\pages\Admin.tsx =====
+1110:       (d.reference||'')+
+1111:       (d.packageName||'')+
+1112:       d.method
+1113:     )
+1114:       .toLowerCase()
+1115:       .includes(q.toLowerCase())
+1116:   );
+1117: 
+1118:   return (
+1119:     <Card>
+1120:       <div className="toolbar">
+1121:         <SearchBar
+1122:           value={q}
+1123:           onChange={setQ}
+1124:           placeholder="Search deposit or referenceâ€¦"
+1125:         />
+1126: 
+1127:         <select
+1128:           value={status}
+1129:           onChange={e=>setStatus(e.target.value)}
+1130:         >
+1131:           <option value="">All statuses</option>
+1132:           <option>PENDING</option>
+1133:           <option>COMPLETED</option>
+1134:           <option>REJECTED</option>
+1135:         </select>
+1136:       </div>
+1137: 
+1138:       <Table headers={['Deposit','Package','Amount','Method','Proof','Status','Date','Actions']}>
+1139:         {rows.map(d=>(
+1140:           <tr key={d._id}>
+1141:             <td>
+1142:               <b>{d.transactionId}</b>
+1143:               <small>{d.reference||'No reference'}</small>
+1144:             </td>
+1145: 
+1146:             <td>{d.packageName||'â€”Ã‚Â'}</td>
+1147: 
+1148:             <td>{formatMoney(d.amount,currency)}</td>
+1149: 
+1150:             <td>{d.method}</td>
+1151: 
+1152:             <td>
+1153:               {d.proofUrl ? (
+1154:                 <button
+1155:                   type="button"
+1156:                   className="button"
+1157:                   onClick={async()=>{
+1158:                     try{
+1159:                       await adminService.openPaymentProof(d.proofUrl!);
+1160:                     }catch(e){
+1161:                       setStatus(
+1162:                         (e as Error).message ||
+1163:                         'Could not open payment screenshot.'
+1164:                       );
+1165:                     }
+1166:                   }}
+1167:                   style={{
+1168:                     display:'inline-flex',
+1169:                     alignItems:'center',
+1170:                     gap:6
+1171:                   }}
+1172:                 >
+1173:                   View Screenshot
+1174:                 </button>
+1175:               ) : (
+1176:                 <small>No proof</small>
+1177:               )}
+1178:             </td>
+1179: 
+1180:             <td>
+1181:               <StatusBadge status={d.status}/>
+1182:             </td>
+1183: 
+1184:             <td>
+1185:               {new Date(d.createdAt).toLocaleString()}
+1186:             </td>
+1187: 
+1188:             <td>
+1189:               {d.status==='PENDING'?
+1190:                 <div className="action-pair">
+1191:                   <Button
+1192:                     loading={busy===d._id}
+1193:                     onClick={()=>void act(d._id,true)}
+1194:                   >
+1195:                     <Check size={14}/>
+1196:                     Approve
+1197:                   </Button>
+1198: 
+1199:                   <Button
+1200:                     loading={busy===d._id}
+1201:                     variant="danger"
+1202:                     onClick={()=>void act(d._id,false)}
+1203:                   >
+1204:                     <X size={14}/>
+1205:                     Reject
+1206:                   </Button>
+1207:                 </div>
+1208:                 :
+1209:                 <StatusBadge status={d.status}/>
+
+===== client\src\services\index.ts =====
+1270:     ).data;
+1271:   },
+1272: 
+1273:   markSupportRead:async(ticketId:string)=>{
+1274:     return (
+1275:       await api.post(
+1276:         `/admin/support/${ticketId}/read`
+1277:       )
+1278:     ).data;
+1279:   },
+1280: 
+1281:   updateSupportStatus:async(
+1282:     ticketId:string,
+1283:     status:'OPEN'|'IN_PROGRESS'|'RESOLVED'
+1284:   )=>{
+1285:     return (
+1286:       await api.patch(
+1287:         `/admin/support/${ticketId}/status`,
+1288:         {status}
+1289:       )
+1290:     ).data;
+1291:   },
+1292: 
+1293:   approveDeposit:async(id:string)=>{
+1294: 
+1295:     if(mockMode){
+1296: 
+1297:       const d=m.deposits.find(
+1298:         x=>x._id===id
+1299:       );
+1300: 
+1301:       if(!d||d.status!=='PENDING'){
+1302:         throw new Error(
+1303:           'Deposit is no longer pending'
+1304:         );
+1305:       }
+1306: 
+1307:       d.status='COMPLETED';
+1308: 
+1309:       const p=m.packages.find(
+1310:         x=>x._id===d.packageId
+1311:       );
+1312: 
+1313:       if(
+1314:         p&&
+1315:         !m.purchases.some(
+1316:           x=>x._id===`purchase-${d._id}`
+1317:         )
+1318:       ){
+1319: 
+1320:         m.purchases.unshift({
+1321:           _id:`purchase-${d._id}`,
+1322:           packageId:p._id,
+1323:           packageName:p.name,
+1324:           packageAmount:p.amount,
+1325:           status:'ACTIVE',
+1326:           activatedAt:new Date().toISOString(),
+1327:           cycleStart:new Date().toISOString(),
+1328:           cycleEnd:new Date(
+1329:             Date.now()+
+1330:             Number(p.cycleDays||1)*
+1331:             Number(m.settings.cycleIntervalHours||24)*
+1332:             3600000
+1333:           ).toISOString(),
+1334:           currentCycle:0,
+1335:           accruedAmount:0,
+1336:           nextProcessAt:new Date(
+1337:             Date.now()+24*3600000
+1338:           ).toISOString()
+1339:         });
+1340:       }
+1341: 
+1342:       const existing=
+1343:         m.transactions.find(
+1344:           t=>
+1345:             t.reference===d.transactionId&&
+1346:             t.type==='DEPOSIT'
+1347:         );
+1348: 
+1349:       if(existing){
+1350:         existing.status='COMPLETED';
+1351:       }else{
+1352: 
+1353:         m.transactions.unshift({
+1354:           _id:nowId('tx'),
+1355:           transactionId:d.transactionId,
+1356:           type:'DEPOSIT',
+1357:           amount:d.amount,
+1358:           fee:0,
+1359:           netAmount:d.amount,
+1360:           status:'COMPLETED',
+1361:           reference:d.transactionId,
+1362:           createdAt:d.createdAt
+1363:         });
+1364:       }
+1365: 
+1366:       const total=
+1367:         (m.dashboard.totalBalance??m.dashboard.balance)+
+1368:         d.amount;
+1369: 
+1370:       m.dashboard.totalBalance=total;
+1371:       m.dashboard.balance=total;
+1372:       m.dashboard.availableBalance+=d.amount;
+1373:       m.dashboard.totalDeposit+=d.amount;
+1374: 
+1375:       return delay(true);
+1376:     }
+1377: 
+1378:     return (
+1379:       await api.post(
+1380:         `/admin/deposits/${id}/verify`
+1381:       )
+1382:     ).data;
+1383:   },
+1384: 
+1385:   rejectDeposit:async(id:string)=>{
+1386: 
+1387:     if(mockMode){
+1388: 
+1389:       const d=m.deposits.find(
+1390:         x=>x._id===id
+1391:       );
+1392: 
+1393:       if(!d||d.status!=='PENDING'){
+1394:         throw new Error(
+1395:           'Deposit is no longer pending'
+1396:         );
+1397:       }
+1398: 
+1399:       d.status='REJECTED';
+1400: 
+1401:       const tx=m.transactions.find(
+1402:         t=>
+1403:           t.reference===d.transactionId&&
+1404:           t.type==='DEPOSIT'
+1405:       );
+1406: 
+1407:       if(tx){
+1408:         tx.status='REJECTED';
+1409:       }
+1410: 
+1411:       return delay(true);
+1412:     }
+1413: 
+1414:     return (
+1415:       await api.post(
+1416:         `/admin/deposits/${id}/reject`
+1417:       )
+1418:     ).data;
+1419:   },
+
+===== client\src\types\index.ts =====
+1: export type Role='USER'|'ADMIN';
+2: export type Status='PENDING'|'PROCESSING'|'COMPLETED'|'REJECTED'|'FAILED'|'ACTIVE'|'APPROVED'|'PAID'|'EXPIRED'|'CANCELLED';
+3: export type TransactionType='DEPOSIT'|'PACKAGE_PURCHASE'|'PACKAGE_INCOME'|'WITHDRAWAL'|'WITHDRAWAL_FEE'|'COMMISSION'|'REWARD'|'PROMO_REWARD'|'ADJUSTMENT'|'REFUND'|'REVERSAL';
+4: export interface Admin extends User{}
+5: export interface Referral{_id:string;userId:string;name:string;level:number;status:string;joinedAt:string;}
+6: export interface Commission{_id:string;userId:string;sourceUserId:string;level:number;rate:number;amount:number;transactionId:string;}
+7: export interface AuditLog{_id:string;adminId:string;action:string;target:string;targetId:string;oldValue?:unknown;newValue?:unknown;createdAt:string;}
+8: export interface User{_id:string;userId:string;fullName:string;username:string;email:string;phone?:string;referralCode:string;referredBy?:string;role:Role;status:string;createdAt:string;}
+9: export interface PackagePlan{_id:string;name:string;amount:number;cycleDays:number;incomeConfiguration:{daily:number;total?:number};description:string;image?:string;status:string;isActive?:boolean;sortOrder:number;createdAt?:string;updatedAt?:string;}
+10: export interface PackagePurchase{_id:string;packageId:string;packageName:string;packageAmount:number;status:Status;activatedAt:string;cycleStart:string;cycleEnd:string;cycleDaysSnapshot?:number;currentCycle:number;accruedAmount:number;nextProcessAt:string;}
+11: export interface Deposit{_id:string;transactionId:string;amount:number;status:Status;method:string;packageId?:string;packageName?:string;reference?:string;proofUrl?:string;createdAt:string;}
+12: export interface Withdrawal{_id:string;transactionId:string;amount:number;fee:number;netAmount:number;method:string;account:string;accountHolderName:string;status:Status;createdAt:string;reservedAmount?:number;idempotencyKey?:string;}
+13: export interface Transaction{_id:string;transactionId:string;type:TransactionType;amount:number;fee:number;netAmount:number;status:Status;reference?:string;description?:string;createdAt:string;}
+14: export interface TeamMember{_id:string;userId:string;name:string;level:number;status:string;joinedAt:string;volume:number;commission:number;}
+15: export interface RewardTier{_id:string;rank:number;name:string;selfBusiness:number;directRequired:number;indirectRequired:number;teamRequired:number;threshold:number;reward:number;status:string;sortOrder:number;}
+16: export interface RewardProgress{
+17:   selfBusiness:number;
+18:   direct:number;
+19:   indirect:number;
+20:   team:number;
+21: }
+22: 
+23: export interface RewardStatus{
+24:   rewards:RewardTier[];
+25:   tiers:RewardTier[];
+
+===== server\src\models\index.ts =====
+1: import mongoose,{Schema,model} from 'mongoose';
+2: const opts={timestamps:true};
+3: export const User=model('User',new Schema({fullName:{type:String,required:true,trim:true},username:{type:String,required:true,unique:true},email:{type:String,required:true,unique:true,lowercase:true},phone:String,passwordHash:{type:String,required:true},userId:{type:String,required:true,unique:true},referralCode:{type:String,required:true,unique:true},referredBy:{type:Schema.Types.ObjectId,ref:'User',index:true},role:{type:String,enum:['USER','ADMIN'],default:'USER',index:true},status:{type:String,enum:['ACTIVE','DISABLED'],default:'ACTIVE',index:true},lastWithdrawalAt:Date,telegramChatId:{type:String,unique:true,sparse:true},telegramLinkCodeHash:String,telegramLinkExpiresAt:Date,tokenVersion:{type:Number,default:0,min:0}},opts));
+4: export const PasswordResetToken=model('PasswordResetToken',new Schema({userId:{type:Schema.Types.ObjectId,ref:'User',required:true,index:true},tokenHash:{type:String,required:true,unique:true},expiresAt:{type:Date,required:true,index:true},usedAt:Date},{...opts,indexes:[{expiresAt:1},{userId:1,expiresAt:-1}]}));export const Wallet=model('Wallet',new Schema({userId:{type:Schema.Types.ObjectId,ref:'User',required:true,unique:true},totalBalance:{type:Number,default:0,min:0},lockedWithdrawalAmount:{type:Number,default:0,min:0}},{...opts}));
+5: export const Package=model('Package',new Schema({name:{type:String,required:true},amount:{type:Number,required:true,min:0.00000001},cycleDays:{type:Number,default:1,min:1},incomeConfiguration:{daily:{type:Number,required:true,min:0},total:Number},description:{type:String,default:''},image:String,status:{type:String,enum:['ACTIVE','DISABLED','ARCHIVED'],default:'ACTIVE',index:true},sortOrder:{type:Number,default:0,index:true}},{...opts,indexes:[{status:1,sortOrder:1}]}));
+6: export const PackagePurchase=model('PackagePurchase',new Schema({userId:{type:Schema.Types.ObjectId,ref:'User',required:true,index:true},packageId:{type:Schema.Types.ObjectId,ref:'Package',required:true,index:true},packageAmount:Number,paymentId:{type:Schema.Types.ObjectId,ref:'Deposit',unique:true,sparse:true},status:{type:String,enum:['PENDING','ACTIVE','EXPIRED','CANCELLED'],default:'PENDING',index:true},activatedAt:Date,cycleStart:Date,cycleEnd:Date,dailyIncomeSnapshot:{type:Number,min:0},cycleDaysSnapshot:{type:Number,min:1},lastProcessedAt:Date,nextProcessAt:{type:Date,index:true},currentCycle:{type:Number,default:0},completedCycles:{type:Number,default:0},accruedAmount:{type:Number,default:0}},{...opts,indexes:[{userId:1,status:1},{nextProcessAt:1,status:1},{userId:1,packageId:1,paymentId:1}]}));
+7: export const Deposit=model('Deposit',new Schema({transactionId:{type:String,unique:true},userId:{type:Schema.Types.ObjectId,ref:'User',required:true,index:true},packageId:{type:Schema.Types.ObjectId,ref:'Package',required:true,index:true},amount:{type:Number,required:true},method:{type:String,required:true},reference:{type:String,required:true,unique:true,sparse:true},proofUrl:String,status:{type:String,enum:['PENDING','PROCESSING','COMPLETED','REJECTED','FAILED','CANCELLED'],default:'PENDING',index:true},verifiedAt:Date,verifiedBy:{type:Schema.Types.ObjectId,ref:'User'}},{...opts,indexes:[{userId:1,createdAt:-1},{status:1,createdAt:-1}]}));
+8: export const Withdrawal=model('Withdrawal',new Schema({transactionId:{type:String,unique:true},userId:{type:Schema.Types.ObjectId,ref:'User',required:true,index:true},amount:{type:Number,required:true},fee:{type:Number,required:true},netAmount:{type:Number,required:true},method:{type:String,required:true},account:{type:String,required:true},accountHolderName:{type:String,required:true,trim:true},status:{type:String,enum:['PENDING','PROCESSING','APPROVED','REJECTED','COMPLETED','FAILED'],default:'PENDING',index:true},approvedBy:{type:Schema.Types.ObjectId,ref:'User'},rejectedBy:{type:Schema.Types.ObjectId,ref:'User'},processedAt:Date,reference:String,idempotencyKey:{type:String,unique:true,sparse:true},reservedAmount:{type:Number,required:true,min:0}},{...opts,indexes:[{userId:1,createdAt:-1},{status:1,createdAt:-1}]}));
+9: export const Transaction=model('Transaction',new Schema({transactionId:{type:String,unique:true},userId:{type:Schema.Types.ObjectId,ref:'User',required:true,index:true},type:{type:String,enum:['DEPOSIT','PACKAGE_PURCHASE','PACKAGE_INCOME','WITHDRAWAL','WITHDRAWAL_FEE','COMMISSION','REWARD','PROMO_REWARD','ADJUSTMENT','REFUND','REVERSAL'],required:true,index:true},amount:{type:Number,required:true},fee:{type:Number,default:0},netAmount:{type:Number},status:{type:String,index:true},reference:{type:String,index:true},description:String,relatedEntity:String,metadata:Schema.Types.Mixed},{...opts,indexes:[{userId:1,createdAt:-1},{type:1,status:1,createdAt:-1},{reference:1},{'metadata.idempotencyKey':1,unique:true,sparse:true}]}));
+10: export const Commission=model('Commission',new Schema({userId:{type:Schema.Types.ObjectId,ref:'User',required:true,index:true},sourceUserId:{type:Schema.Types.ObjectId,ref:'User',required:true,index:true},level:{type:Number,required:true},rate:{type:Number,required:true},amount:{type:Number,required:true},transactionId:{type:String,index:true}},{...opts,indexes:[{userId:1,level:1},{sourceUserId:1,level:1,transactionId:1,unique:true}]}));
+11: export const Reward=model('Reward',new Schema({rank:{type:Number,required:true,unique:true,min:1,max:10},name:{type:String,required:true,trim:true},selfBusiness:{type:Number,required:true,min:0},directRequired:{type:Number,required:true,min:0},indirectRequired:{type:Number,required:true,min:0},teamRequired:{type:Number,required:true,min:0},threshold:{type:Number,required:true,min:0},reward:{type:Number,required:true,min:0},status:{type:String,default:'ACTIVE',index:true},sortOrder:{type:Number,required:true}},{...opts,indexes:[{status:1,threshold:1},{status:1,rank:1},{threshold:1}]}));
+12: export const PromoCode=model('PromoCode',new Schema({code:{type:String,unique:true},rewardType:String,rewardValue:Number,usageLimit:Number,perUserLimit:Number,minRequirement:{type:Number,default:0},expiresAt:Date,usageCount:{type:Number,default:0,min:0},status:{type:String,default:'ACTIVE',index:true}},{...opts,indexes:[{createdAt:-1}]}));
+13: export const PromoUsage=model('PromoUsage',new Schema({promoCodeId:{type:Schema.Types.ObjectId,ref:'PromoCode',index:true},userId:{type:Schema.Types.ObjectId,ref:'User',index:true},reward:Number,usageKey:{type:String}},{...opts,indexes:[{promoCodeId:1,userId:1},{usageKey:1,unique:true,sparse:true}]}));
+14: export const PromoUserCounter=model('PromoUserCounter',new Schema({promoCodeId:{type:Schema.Types.ObjectId,ref:'PromoCode',required:true},userId:{type:Schema.Types.ObjectId,ref:'User',required:true},count:{type:Number,default:0,min:0}},{...opts,indexes:[{promoCodeId:1,userId:1,unique:true}]}));
+15: export const RewardClaim=model('RewardClaim',new Schema({userId:{type:Schema.Types.ObjectId,ref:'User',required:true},rewardId:{type:Schema.Types.ObjectId,ref:'Reward',required:true},reference:{type:String,required:true}},{...opts,indexes:[{userId:1,rewardId:1,unique:true},{reference:1,unique:true}]}));
