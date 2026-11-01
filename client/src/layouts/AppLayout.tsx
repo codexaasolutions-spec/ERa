@@ -86,7 +86,7 @@ export default function AppLayout(){
         onClick={()=>setOpen(false)}
       />
 
-      <aside className={open?'sidebar open':'sidebar'}>
+      <aside className={open?'sidebar open':'sidebar'} style={{height:"100vh",overflowY:"auto",overscrollBehavior:"contain"}}>
 
         <div className="brand">
           <span>TM</span>
@@ -404,6 +404,8 @@ export default function AppLayout(){
     </div>
   );
 }
+
+
 
 
 
