@@ -1989,3 +1989,9 @@ tbody tr:hover {
 .sidebar nav{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain}
 .sidebar .logout{position:relative!important;display:flex!important;flex-shrink:0!important;visibility:visible!important;opacity:1!important;margin-top:12px!important;min-height:44px!important;cursor:pointer!important}
 
+
+/* FIX: Keep logout always visible */
+.sidebar{height:100vh!important;height:100dvh!important;display:flex!important;flex-direction:column!important;overflow:hidden!important}
+.sidebar nav{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important}
+.sidebar .logout{position:sticky!important;bottom:0!important;flex:0 0 auto!important;flex-shrink:0!important;margin-top:auto!important;display:flex!important;visibility:visible!important;opacity:1!important;min-height:48px!important;z-index:50!important;background:#050b12!important}
+
