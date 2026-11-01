@@ -6,7 +6,7 @@ const apiBaseUrl = String(import.meta.env.VITE_API_URL ?? '').trim();
 
 export const api = axios.create({
   baseURL: apiBaseUrl || 'http://localhost:5000/api',
-  timeout: 8000
+  timeout: 30000
 });
 
 api.interceptors.request.use(c=>{
@@ -103,5 +103,6 @@ api.request=((config:any)=>{
   inFlight.set(key,work as Promise<unknown>);
   return work;
 }) as typeof api.request;
+
 
 
