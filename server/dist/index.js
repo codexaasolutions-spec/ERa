@@ -13,8 +13,14 @@ import { notFound } from './middleware/notFound.js';
 import { startCycleJob } from './jobs/cycleJob.js';
 import { initializeWallets } from './services/ledger.js';
 const app = express();
+const cspDirectives = helmet.contentSecurityPolicy.getDefaultDirectives();
+cspDirectives["img-src"] = ["'self'", "data:", "blob:"];
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: cspDirectives,
+    },
+}));
 app.set('trust proxy', 1);
-app.use(helmet({ contentSecurityPolicy: { directives: { ...helmet.contentSecurityPolicy.getDefaultDirectives(), imgSrc: ["'self'", "data:", "blob:"] } } }));
 app.use(cors({
     origin: (origin, callback) => {
         if (!origin || allowedOrigins.map(x => x.replace(/\/$/, '')).includes(origin.replace(/\/$/, ''))) {
