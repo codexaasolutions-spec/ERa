@@ -1295,7 +1295,7 @@ export function Support(){
 
            <a
   className="btn"
-  href="https://m.me/61594176853527"
+  href="https://www.facebook.com/share/p/1DTq68z9QF/"
   target="_blank"
   rel="noreferrer"
 >
