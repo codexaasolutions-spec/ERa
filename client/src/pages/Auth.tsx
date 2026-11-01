@@ -2,12 +2,12 @@ import {FormEvent,ReactNode,useState} from 'react';
 import {useNavigate,Link,useSearchParams} from 'react-router-dom';
 import {useAuth} from '../context/AuthContext';
 import {Button,Card,Field} from '../components/ui';
-import {ShieldCheck,MessageCircle} from 'lucide-react';
+import {ShieldCheck,MessageCircle,Eye,EyeOff} from 'lucide-react';
 
 const WHATSAPP_CHANNEL='https://whatsapp.com/channel/0029Vb8r8KN4dTnFwnDT2J0D';
 
 function AuthBox({title,subtitle,children}:{title:string;subtitle:string;children:ReactNode}){
-  return <div className="auth-page"><Card className="auth-card"><div className="brand big"><span>TM</span><div><b>LTC ERA</b><small>Mine Today â€¢ Earn Tomorrow</small></div></div><div className="auth-trust"><ShieldCheck size={15}/> Secure account workspace</div><h1>{title}</h1><p>{subtitle}</p>{children}</Card></div>
+  return <div className="auth-page"><Card className="auth-card"><div className="brand big"><span>TM</span><div><b>LTC ERA</b><small>Mine Today Ã¢â‚¬Â¢ Earn Tomorrow</small></div></div><div className="auth-trust"><ShieldCheck size={15}/> Secure account workspace</div><h1>{title}</h1><p>{subtitle}</p>{children}</Card></div>
 }
 
 function WhatsAppJoinPopup({onContinue}:{onContinue:()=>void}){
@@ -34,7 +34,7 @@ function WhatsAppJoinPopup({onContinue}:{onContinue:()=>void}){
         onClick={onContinue}
         style={{width:'100%',padding:'13px 18px',borderRadius:'12px',border:'1px solid #d1d5db',background:'#f9fafb',color:'#374151',fontWeight:700,fontSize:'14px',cursor:'pointer'}}
       >
-        I've Joined â€” Continue
+        I've Joined Ã¢â‚¬â€ Continue
       </button>
       <p style={{margin:'16px 0 0',fontSize:'12px',color:'#9ca3af'}}>Please join the channel to receive important updates.</p>
     </div>
@@ -48,6 +48,7 @@ export function Login(){
     [loading,setLoading]=useState(false),
     [showWhatsApp,setShowWhatsApp]=useState(false);
 
+  const [showPassword,setShowPassword]=useState(false);
   const {login}=useAuth();
   const nav=useNavigate();
 
@@ -79,7 +80,7 @@ export function Login(){
     <AuthBox title="Welcome back" subtitle="Sign in to your LTC ERA workspace">
       <form onSubmit={submit} className="form-grid">
         <Field label="Email"><input value={email} onChange={e=>setEmail(e.target.value)} type="email" required/></Field>
-        <Field label="Password"><input value={password} onChange={e=>setPassword(e.target.value)} type="password" required/></Field>
+        <Field label="Password"><div style={{position:"relative"}}><input value={password} onChange={e=>setPassword(e.target.value)} type={showPassword?"text":"password"} required style={{paddingRight:"44px",width:"100%"}}/><button type="button" onClick={()=>setShowPassword(v=>!v)} aria-label={showPassword?"Hide password":"Show password"} style={{position:"absolute",right:"12px",top:"50%",transform:"translateY(-50%)",border:0,background:"transparent",cursor:"pointer",padding:"5px"}}>{showPassword?<EyeOff size={19}/>:<Eye size={19}/>}</button></div></Field>
         {error&&<p className="error">{error}</p>}
         <Button type="submit" loading={loading}>Sign in</Button>
       </form>
@@ -97,6 +98,7 @@ export function Register(){
   const [form,setForm]=useState({fullName:'',username:'',email:'',phone:'',password:'',referralCode:referralFromUrl}),
     [error,setError]=useState(''),
     [loading,setLoading]=useState(false);
+  const [showPassword,setShowPassword]=useState(false);
   const {register}=useAuth();
   const nav=useNavigate();
   const update=(k:string,v:string)=>setForm(f=>({...f,[k]:v}));
@@ -116,7 +118,7 @@ export function Register(){
       <Field label="Username"><input value={form.username} onChange={e=>update('username',e.target.value)} required/></Field>
       <Field label="Email"><input type="email" value={form.email} onChange={e=>update('email',e.target.value)} required/></Field>
       <Field label="Phone"><input value={form.phone} onChange={e=>update('phone',e.target.value)}/></Field>
-      <Field label="Password"><input type="password" value={form.password} onChange={e=>update('password',e.target.value)} required minLength={8}/></Field>
+      <Field label="Password"><div style={{position:"relative"}}><input type={showPassword?"text":"password"} value={form.password} onChange={e=>update('password',e.target.value)} required minLength={8} style={{paddingRight:"44px",width:"100%"}}/><button type="button" onClick={()=>setShowPassword(v=>!v)} aria-label={showPassword?"Hide password":"Show password"} style={{position:"absolute",right:"12px",top:"50%",transform:"translateY(-50%)",border:0,background:"transparent",cursor:"pointer",padding:"5px"}}>{showPassword?<EyeOff size={19}/>:<Eye size={19}/>}</button></div></Field>
       <Field label="Referral code"><input value={form.referralCode} onChange={e=>update('referralCode',e.target.value)} placeholder="Optional"/></Field>
       {error&&<p className="error full">{error}</p>}
       <div className="full"><Button type="submit" loading={loading}>Create account</Button></div>
