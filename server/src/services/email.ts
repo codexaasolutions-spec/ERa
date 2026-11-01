@@ -1,4 +1,4 @@
-﻿import nodemailer from 'nodemailer';
+import nodemailer from 'nodemailer';
 import { env } from '../config/env.js';
 
 const transporter = nodemailer.createTransport({
@@ -18,13 +18,13 @@ export async function sendPasswordResetEmail(
   expiresAt: Date,
 ) {
   await transporter.sendMail({
-    from: env.SMTP_FROM,
+    from: { name: 'LTC Era', address: env.SMTP_FROM },
     to: email,
-    subject: 'Trust Mine - Reset Your Password',
+    subject: 'LTC Era - Reset Your Password',
     text: [
       `Hello ${fullName || 'there'},`,
       '',
-      'We received a request to reset your Trust Mine password.',
+      'We received a request to reset your LTC Era password.',
       '',
       `Reset your password here: ${resetUrl}`,
       '',
@@ -32,13 +32,13 @@ export async function sendPasswordResetEmail(
       '',
       'If you did not request this password reset, you can safely ignore this email.',
       '',
-      'Trust Mine',
+      'LTC Era',
     ].join('\n'),
     html: `
       <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:30px">
-        <h2>Trust Mine</h2>
+        <h2>LTC Era</h2>
         <p>Hello ${fullName || 'there'},</p>
-        <p>We received a request to reset your Trust Mine password.</p>
+        <p>We received a request to reset your LTC Era password.</p>
         <p>
           <a href="${resetUrl}"
              style="display:inline-block;padding:12px 20px;background:#2563eb;color:#fff;text-decoration:none;border-radius:6px">
@@ -47,7 +47,7 @@ export async function sendPasswordResetEmail(
         </p>
         <p>This link expires at ${expiresAt.toISOString()}.</p>
         <p>If you did not request this password reset, you can safely ignore this email.</p>
-        <p>Trust Mine</p>
+        <p>LTC Era</p>
       </div>
     `,
   });
