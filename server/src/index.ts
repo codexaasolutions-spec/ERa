@@ -17,7 +17,7 @@ import { initializeWallets } from './services/ledger.js';
 const app = express();
 app.set('trust proxy', 1);
 
-app.use(helmet());
+app.use(helmet({ contentSecurityPolicy: { directives: { ...helmet.contentSecurityPolicy.getDefaultDirectives(), imgSrc: ["'self'", "data:", "blob:"] } } }));
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -128,3 +128,4 @@ const shutdown = async (signal: string) => {
 
 process.once('SIGINT', () => void shutdown('SIGINT'));
 process.once('SIGTERM', () => void shutdown('SIGTERM'));
+
