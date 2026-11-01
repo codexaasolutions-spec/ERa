@@ -1,4 +1,4 @@
-﻿import {useEffect,useState} from 'react';
+import {useEffect,useState} from 'react';
 import {NavLink,useNavigate,Outlet} from 'react-router-dom';
 import {LayoutDashboard,UserCircle,WalletCards,ArrowDownToLine,Boxes,Users,Gift,TicketPercent,ReceiptText,LifeBuoy,Settings,Menu,X,LogOut,ShieldCheck,Bell,History,MessageCircle} from 'lucide-react';
 import {useAuth} from '../context/AuthContext';
@@ -86,7 +86,7 @@ export default function AppLayout(){
         onClick={()=>setOpen(false)}
       />
 
-      <aside className={open?'sidebar open':'sidebar'} style={{height:"100vh",overflowY:"auto",overscrollBehavior:"contain"}}>
+      <aside className={open?'sidebar open':'sidebar'} style={{height:"100dvh",overflow:"hidden",display:"flex",flexDirection:"column"}}>
 
         <div className="brand">
           <span>TM</span>
@@ -138,7 +138,7 @@ export default function AppLayout(){
                 <ShieldCheck size={18}/>
                 Information & Policies
               </span>
-              <span>{policiesOpen?'âˆ’':'+'}</span>
+              <span>{policiesOpen?'−':'+'}</span>
             </button>
 
             {policiesOpen&&(
@@ -225,7 +225,7 @@ export default function AppLayout(){
                 cursor:'pointer'
               }}
             >
-              Ã¢â€ Â© Return to Admin
+              © Return to Admin
             </button>
           </div>
         )}
@@ -259,7 +259,7 @@ export default function AppLayout(){
             </div>
             <div>
               <b>{user?.fullName||'Guest'}</b>
-              <small>ID: {user?.userId||'Ã¢â‚¬â€'}</small>
+              <small>ID: {user?.userId||'—'}</small>
             </div>
           </div>
         </header>
@@ -385,7 +385,7 @@ export default function AppLayout(){
                 cursor:'pointer'
               }}
             >
-              I've Joined Ã¢â‚¬â€ Continue
+              I've Joined — Continue
             </button>
 
             <p
@@ -404,6 +404,9 @@ export default function AppLayout(){
     </div>
   );
 }
+
+
+
 
 
 
