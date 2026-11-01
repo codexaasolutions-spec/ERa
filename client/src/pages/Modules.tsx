@@ -1,4 +1,4 @@
-import {FormEvent,ReactNode,useEffect,useRef,useState} from 'react';
+﻿import {FormEvent,ReactNode,useEffect,useRef,useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useAuth} from '../context/AuthContext';
 import {depositService,withdrawalService,transactionService,teamService,rewardService,promoService,settingsService,notificationService,supportService,paymentMethodService,packageService,userService,telegramService,dashboardService} from '../services';
@@ -44,7 +44,7 @@ function useCurrency(){
 
 export function PackageDetails({id}:{id:string}){const currency=useCurrency();const [cycleHours,setCycleHours]=useState(24);useEffect(()=>{void getCachedSettings().then(x=>setCycleHours(Number(x.cycleIntervalHours||24))).catch(()=>undefined)},[]);const [p,setP]=useState<PackagePlan|null>(null),[error,setError]=useState('');const nav=useNavigate();const load=()=>{setError('');packageService.getPackage(id).then(v=>{if(v)setP(v);else setError('Package not found.')}).catch(e=>setError(e.message||'Unable to load package.'))};useEffect(()=>{void load()},[id]);if(error)return <Shell eyebrow="PACKAGE" title="Package details" description="The requested package could not be loaded."><PageState type="error" message={error} onRetry={load}/></Shell>;if(!p)return <Shell eyebrow="PACKAGE" title="Package details" description="Package configuration"><Card><div className="detail-hero"><span className="mini">{cycleHours}-HOUR CYCLE</span><strong>Package details</strong><p className="muted-copy">Package information is loading in the background.</p></div></Card></Shell>;return <Shell eyebrow="PACKAGE" title={p.name} description="Review the server-configured package before starting the deposit flow."><div className="detail-grid"><Card><div className="detail-hero"><span className="mini">{cycleHours}-HOUR CYCLE</span><StatusBadge status={p.status}/><strong>{formatMoney(p.amount,currency)}</strong><p>{p.description}</p></div><div className="metric-grid"><div><span>Daily configuration</span><b>{formatMoney(p.incomeConfiguration.daily,currency)}</b></div><div><span>Package duration</span><b>{p.cycleDays} days</b></div><div><span>Sort order</span><b>#{p.sortOrder}</b></div></div><Button disabled={p.status!=='ACTIVE'} onClick={()=>nav(`/deposit?packageId=${p._id}`)}>Deposit & Activate <ArrowRight size={15}/></Button></Card></div></Shell>}
 
-export function DepositHistory(){const currency=useCurrency();const [items,setItems]=useState<Deposit[]>([]),[q,setQ]=useState(''),[status,setStatus]=useState(''),[error,setError]=useState('');const load=()=>{setError('');depositService.getDeposits().then(setItems).catch(e=>setError(e.message||'Unable to load deposits.'))};useEffect(()=>{void load()},[]);const filtered=items.filter(x=>(!status||x.status===status)&&(x.transactionId+x.method+(x.packageName||'')+(x.reference||'')).toLowerCase().includes(q.toLowerCase()));return <Shell eyebrow="FUNDING" title="Deposit History" description="Track submitted deposits and their server-controlled verification state."><Card><div className="toolbar"><SearchBar value={q} onChange={setQ} placeholder="Search deposit ID, reference or method…"/><select value={status} onChange={e=>setStatus(e.target.value)}><option value="">All statuses</option><option>PENDING</option><option>PROCESSING</option><option>COMPLETED</option><option>REJECTED</option><option>FAILED</option><option>CANCELLED</option></select><Button variant="ghost" onClick={load}><RefreshCw size={14}/>Refresh</Button></div>{error&&<p className="error">{error}</p>}{filtered.length?<Table headers={['Transaction','Package','Amount','Method','Status','Date']}>{filtered.map(d=><tr key={d._id}><td><b>{d.transactionId}</b><small>{d.reference||'—'}</small></td><td>{d.packageName||'—'}</td><td>{formatMoney(d.amount,currency)}</td><td>{d.method}</td><td><StatusBadge status={d.status}/></td><td>{new Date(d.createdAt).toLocaleDateString()}</td></tr>)}</Table>:<PageState type="empty" message="No deposits match your filters."/>}</Card></Shell>}
+export function DepositHistory(){const currency=useCurrency();const [items,setItems]=useState<Deposit[]>([]),[q,setQ]=useState(''),[status,setStatus]=useState(''),[error,setError]=useState('');const load=()=>{setError('');depositService.getDeposits().then(setItems).catch(e=>setError(e.message||'Unable to load deposits.'))};useEffect(()=>{void load()},[]);const filtered=items.filter(x=>(!status||x.status===status)&&(x.transactionId+x.method+(x.packageName||'')+(x.reference||'')).toLowerCase().includes(q.toLowerCase()));return <Shell eyebrow="FUNDING" title="Deposit History" description="Track submitted deposits and their server-controlled verification state."><Card><div className="toolbar"><SearchBar value={q} onChange={setQ} placeholder="Search deposit ID, reference or methodâ€¦"/><select value={status} onChange={e=>setStatus(e.target.value)}><option value="">All statuses</option><option>PENDING</option><option>PROCESSING</option><option>COMPLETED</option><option>REJECTED</option><option>FAILED</option><option>CANCELLED</option></select><Button variant="ghost" onClick={load}><RefreshCw size={14}/>Refresh</Button></div>{error&&<p className="error">{error}</p>}{filtered.length?<Table headers={['Transaction','Package','Amount','Method','Status','Date']}>{filtered.map(d=><tr key={d._id}><td><b>{d.transactionId}</b><small>{d.reference||'â€”'}</small></td><td>{d.packageName||'â€”'}</td><td>{formatMoney(d.amount,currency)}</td><td>{d.method}</td><td><StatusBadge status={d.status}/></td><td>{new Date(d.createdAt).toLocaleDateString()}</td></tr>)}</Table>:<PageState type="empty" message="No deposits match your filters."/>}</Card></Shell>}
 
 export function Withdrawal(){
   const currency=useCurrency();
@@ -201,7 +201,7 @@ export function Withdrawal(){
           <div className="notice">
             <b>Withdrawal availability</b>
             <br/>
-            Withdrawal window: <strong>10:00 AM ï¿½ 5:00 PM</strong> Pakistan time.
+            Withdrawal window: <strong>10:00 AM Ã¯Â¿Â½ 5:00 PM</strong> Pakistan time.
             <br/>
             One withdrawal is allowed every <strong>24 hours</strong>.
             <br/><br/>
@@ -209,10 +209,10 @@ export function Withdrawal(){
             {eligibilityLoading ? (
               <span>Checking withdrawal availability...</span>
             ) : eligible ? (
-              <span className="success">? Withdrawal available</span>
+              <span className="success">✓ Withdrawal available</span>
             ) : (
               <span className="error">
-                ?? Next withdrawal available in <strong>{countdown||'calculating...'}</strong>
+                Next withdrawal available in <strong>{countdown||'calculating...'}</strong>
               </span>
             )}
           </div>
@@ -326,7 +326,7 @@ export function Withdrawal(){
 
 export function WithdrawalHistory(){const currency=useCurrency();const [items,setItems]=useState<WithdrawalRecord[]>([]),[error,setError]=useState('');const load=async()=>{try{const data=await withdrawalService.getWithdrawals();setItems(data);setError('')}catch(e){const err=e as Error;setError(err.message||'Unable to load withdrawals.')}};useEffect(()=>{void load();const interval=window.setInterval(()=>{void load()},5000);return()=>window.clearInterval(interval)},[]);return <Shell eyebrow="PAYOUT" title="Withdrawal History" description="Review payout requests and their processing status."><Card>{error&&<p className="error">{error}</p>}{items.length?<Table headers={['Transaction','Amount','Fee','Net','Method','Status','Date']}>{items.map(w=><tr key={w._id}><td>{w.transactionId}</td><td>{formatMoney(w.amount,currency)}</td><td>{formatMoney(w.fee,currency)}</td><td>{formatMoney(w.netAmount,currency)}</td><td>{w.method}</td><td><StatusBadge status={w.status}/></td><td>{new Date(w.createdAt).toLocaleDateString()}</td></tr>)}</Table>:<PageState type="empty" message="No withdrawal requests yet."/>}</Card></Shell>}
 
-export function Transactions(){const currency=useCurrency();const [items,setItems]=useState<Transaction[]>([]),[q,setQ]=useState(''),[type,setType]=useState(''),[status,setStatus]=useState(''),[error,setError]=useState(''),[loading,setLoading]=useState(true);const requestSeq=useRef(0);const load=()=>{const seq=++requestSeq.current;setLoading(true);setError('');transactionService.getTransactions({q,type,status}).then(rows=>{if(seq===requestSeq.current)setItems(rows)}).catch(e=>{if(seq===requestSeq.current)setError(e.message||'Unable to load transactions.')}).finally(()=>{if(seq===requestSeq.current)setLoading(false)})};useEffect(()=>{const timer=window.setTimeout(()=>{void load()},300);return()=>window.clearTimeout(timer)},[q,type,status]);return <Shell eyebrow="LEDGER" title="Transaction History" description="Unified, traceable financial events returned by the ledger service."><Card><div className="toolbar"><SearchBar value={q} onChange={setQ} placeholder="Search transaction…"/><div className="filter-row"><select value={type} onChange={e=>setType(e.target.value)}><option value="">All types</option>{['DEPOSIT','PACKAGE_PURCHASE','PACKAGE_INCOME','WITHDRAWAL','WITHDRAWAL_FEE','COMMISSION','REWARD','PROMO_REWARD','ADJUSTMENT','REFUND','REVERSAL'].map(x=><option key={x} value={x}>{x}</option>)}</select><select value={status} onChange={e=>setStatus(e.target.value)}><option value="">All statuses</option>{['COMPLETED','PENDING','PROCESSING','REJECTED','APPROVED','FAILED'].map(x=><option key={x} value={x}>{x}</option>)}</select></div><Button variant="ghost" onClick={load}><RefreshCw size={14}/>Refresh</Button></div>{error&&<p className="error">{error}</p>}{loading&&items.length===0?<div className="skeleton" style={{height:180,width:'100%'}}/>:items.length?<Table headers={['ID','Type','Amount','Fee','Net','Status','Date']}>{items.map(t=><tr key={t._id}><td><b>{t.transactionId}</b><small>{t.description||'Ledger event'}</small></td><td>{t.type}</td><td>{formatMoney(t.amount,currency)}</td><td>{formatMoney(t.fee,currency)}</td><td>{formatMoney(t.netAmount,currency)}</td><td><StatusBadge status={t.status}/></td><td>{new Date(t.createdAt).toLocaleDateString()}</td></tr>)}</Table>:<PageState type="empty" message="No transactions found."/>}</Card></Shell>}
+export function Transactions(){const currency=useCurrency();const [items,setItems]=useState<Transaction[]>([]),[q,setQ]=useState(''),[type,setType]=useState(''),[status,setStatus]=useState(''),[error,setError]=useState(''),[loading,setLoading]=useState(true);const requestSeq=useRef(0);const load=()=>{const seq=++requestSeq.current;setLoading(true);setError('');transactionService.getTransactions({q,type,status}).then(rows=>{if(seq===requestSeq.current)setItems(rows)}).catch(e=>{if(seq===requestSeq.current)setError(e.message||'Unable to load transactions.')}).finally(()=>{if(seq===requestSeq.current)setLoading(false)})};useEffect(()=>{const timer=window.setTimeout(()=>{void load()},300);return()=>window.clearTimeout(timer)},[q,type,status]);return <Shell eyebrow="LEDGER" title="Transaction History" description="Unified, traceable financial events returned by the ledger service."><Card><div className="toolbar"><SearchBar value={q} onChange={setQ} placeholder="Search transactionâ€¦"/><div className="filter-row"><select value={type} onChange={e=>setType(e.target.value)}><option value="">All types</option>{['DEPOSIT','PACKAGE_PURCHASE','PACKAGE_INCOME','WITHDRAWAL','WITHDRAWAL_FEE','COMMISSION','REWARD','PROMO_REWARD','ADJUSTMENT','REFUND','REVERSAL'].map(x=><option key={x} value={x}>{x}</option>)}</select><select value={status} onChange={e=>setStatus(e.target.value)}><option value="">All statuses</option>{['COMPLETED','PENDING','PROCESSING','REJECTED','APPROVED','FAILED'].map(x=><option key={x} value={x}>{x}</option>)}</select></div><Button variant="ghost" onClick={load}><RefreshCw size={14}/>Refresh</Button></div>{error&&<p className="error">{error}</p>}{loading&&items.length===0?<div className="skeleton" style={{height:180,width:'100%'}}/>:items.length?<Table headers={['ID','Type','Amount','Fee','Net','Status','Date']}>{items.map(t=><tr key={t._id}><td><b>{t.transactionId}</b><small>{t.description||'Ledger event'}</small></td><td>{t.type}</td><td>{formatMoney(t.amount,currency)}</td><td>{formatMoney(t.fee,currency)}</td><td>{formatMoney(t.netAmount,currency)}</td><td><StatusBadge status={t.status}/></td><td>{new Date(t.createdAt).toLocaleDateString()}</td></tr>)}</Table>:<PageState type="empty" message="No transactions found."/>}</Card></Shell>}
 
 export function Team(){const currency=useCurrency();
   const [members,setMembers]=useState<TeamMember[]>([]),
@@ -470,12 +470,12 @@ export function Team(){const currency=useCurrency();
             <div className="metric-grid">
               <div>
                 <span>Name</span>
-                <b>{m.name||'ï¿½'}</b>
+                <b>{m.name||'Ã¯Â¿Â½'}</b>
               </div>
 
               <div>
                 <span>User ID</span>
-                <b>{m.userId||'ï¿½'}</b>
+                <b>{m.userId||'Ã¯Â¿Â½'}</b>
               </div>
 
               <div>
@@ -485,7 +485,7 @@ export function Team(){const currency=useCurrency();
 
               <div>
                 <span>Status</span>
-                <b>{m.status||'ï¿½'}</b>
+                <b>{m.status||'Ã¯Â¿Â½'}</b>
               </div>
 
               <div>
@@ -1519,4 +1519,5 @@ export function Support(){
     </Shell>
   );
 }
+
 
