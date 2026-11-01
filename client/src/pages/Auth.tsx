@@ -7,7 +7,7 @@ import {ShieldCheck,MessageCircle,Eye,EyeOff} from 'lucide-react';
 const WHATSAPP_CHANNEL='https://whatsapp.com/channel/0029Vb8r8KN4dTnFwnDT2J0D';
 
 function AuthBox({title,subtitle,children}:{title:string;subtitle:string;children:ReactNode}){
-  return <div className="auth-page"><Card className="auth-card"><div className="brand big"><span>TM</span><div><b>LTC ERA</b><small>Mine Today ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Earn Tomorrow</small></div></div><div className="auth-trust"><ShieldCheck size={15}/> Secure account workspace</div><h1>{title}</h1><p>{subtitle}</p>{children}</Card></div>
+  return <div className="auth-page"><Card className="auth-card"><div className="brand big"><span>TM</span><div><b>LTC ERA</b><small>Mine Today Ã¢â‚¬Â¢ Earn Tomorrow</small></div></div><div className="auth-trust"><ShieldCheck size={15}/> Secure account workspace</div><h1>{title}</h1><p>{subtitle}</p>{children}</Card></div>
 }
 
 function WhatsAppJoinPopup({onContinue}:{onContinue:()=>void}){
@@ -34,7 +34,7 @@ function WhatsAppJoinPopup({onContinue}:{onContinue:()=>void}){
         onClick={onContinue}
         style={{width:'100%',padding:'13px 18px',borderRadius:'12px',border:'1px solid #d1d5db',background:'#f9fafb',color:'#374151',fontWeight:700,fontSize:'14px',cursor:'pointer'}}
       >
-        I've Joined — Continue
+        I've Joined Ã¢â‚¬â€ Continue
       </button>
       <p style={{margin:'16px 0 0',fontSize:'12px',color:'#9ca3af'}}>Please join the channel to receive important updates.</p>
     </div>
