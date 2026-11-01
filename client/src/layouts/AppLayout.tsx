@@ -408,7 +408,7 @@ export default function AppLayout(){
                 cursor:'pointer'
               }}
             >
-              I've Joined â€”Â Continue
+              Close
             </button>
 
             <p
