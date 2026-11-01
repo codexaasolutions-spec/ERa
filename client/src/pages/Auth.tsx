@@ -1,6 +1,7 @@
 import {FormEvent,ReactNode,useState} from 'react';
 import {useNavigate,Link,useSearchParams} from 'react-router-dom';
 import {useAuth} from '../context/AuthContext';
+import {authService} from '../services';
 import {Button,Card,Field} from '../components/ui';
 import {ShieldCheck,MessageCircle,Eye,EyeOff} from 'lucide-react';
 
@@ -127,21 +128,94 @@ export function Register(){
   </AuthBox>
 }
 
-export function ForgotPassword(){
-  return <AuthBox title="Reset access" subtitle="Password reset delivery is not configured in this build.">
-    <div className="notice">No reset email provider is connected, so this action is intentionally unavailable rather than pretending to send a reset message.</div>
-    <Button disabled>Reset request unavailable</Button>
+export function ForgotPassword() {
+  const [email,setEmail]=useState('');
+  const [loading,setLoading]=useState(false);
+  const [error,setError]=useState('');
+  const [success,setSuccess]=useState(false);
+
+  const submit=async(e:FormEvent)=>{
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+    try{
+      await authService.requestPasswordReset(email.trim());
+      setSuccess(true);
+    }catch(err:any){
+      setError(err?.response?.data?.message||err?.message||'Unable to send reset request. Please try again.');
+    }finally{
+      setLoading(false);
+    }
+  };
+
+  return <AuthBox title="Reset access" subtitle="Enter your registered email to receive a password reset link.">
+    {success ? <>
+      <div className="notice">If an account exists with this email, password reset instructions have been sent. Please check your inbox and spam folder.</div>
+    </> : <form onSubmit={submit} className="form-grid">
+      <Field label="Email address">
+        <input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Enter your registered email" required/>
+      </Field>
+      {error&&<p className="error full">{error}</p>}
+      <div className="full"><Button type="submit" loading={loading}>Send Reset Link</Button></div>
+    </form>}
     <p className="auth-link"><Link to="/login">Back to sign in</Link></p>
-  </AuthBox>
+  </AuthBox>;
 }
 
-export function ResetPassword(){
+export function ResetPassword() {
   const [q]=useSearchParams();
-  return <AuthBox title="Choose a new password" subtitle={`Reset token: ${q.get('token')?'provided':'awaiting token'}`}>
-    <div className="notice">Password reset is unavailable until a server-side reset-token and email provider is configured.</div>
-    <Button disabled>Update password unavailable</Button>
+  const token=q.get('token')||'';
+  const [password,setPassword]=useState('');
+  const [confirmPassword,setConfirmPassword]=useState('');
+  const [loading,setLoading]=useState(false);
+  const [error,setError]=useState('');
+  const [success,setSuccess]=useState(false);
+
+  const submit=async(e:FormEvent)=>{
+    e.preventDefault();
+    setError('');
+
+    if(!token){
+      setError('Reset token is missing. Please request a new reset link.');
+      return;
+    }
+    if(password.length<8){
+      setError('Password must be at least 8 characters.');
+      return;
+    }
+    if(password!==confirmPassword){
+      setError('Passwords do not match.');
+      return;
+    }
+
+    setLoading(true);
+    try{
+      await authService.resetPassword(token,password);
+      setSuccess(true);
+    }catch(err:any){
+      setError(err?.response?.data?.message||err?.message||'Password reset failed. The link may have expired.');
+    }finally{
+      setLoading(false);
+    }
+  };
+
+  return <AuthBox title="Choose a new password" subtitle="Create a new password for your account.">
+    {success ? <>
+      <div className="notice">Your password has been updated successfully. You can now sign in using your new password.</div>
+      <p className="auth-link"><Link to="/login">Sign in now</Link></p>
+    </> : !token ? <>
+      <div className="notice">Reset token is missing. Please request a new password reset link.</div>
+      <p className="auth-link"><Link to="/forgot-password">Request a new link</Link></p>
+    </> : <form onSubmit={submit} className="form-grid">
+      <Field label="New password">
+        <input type="password" value={password} onChange={e=>setPassword(e.target.value)} minLength={8} placeholder="Minimum 8 characters" required/>
+      </Field>
+      <Field label="Confirm new password">
+        <input type="password" value={confirmPassword} onChange={e=>setConfirmPassword(e.target.value)} minLength={8} placeholder="Enter password again" required/>
+      </Field>
+      {error&&<p className="error full">{error}</p>}
+      <div className="full"><Button type="submit" loading={loading}>Update Password</Button></div>
+    </form>}
     <p className="auth-link"><Link to="/login">Back to sign in</Link></p>
-  </AuthBox>
+  </AuthBox>;
 }
-
-
