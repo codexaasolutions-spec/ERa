@@ -1,13 +1,11 @@
-import axios,{AxiosRequestConfig} from 'axios';
+﻿import axios,{AxiosRequestConfig} from 'axios';
 
 const apiBaseUrl = String(import.meta.env.VITE_API_URL ?? '').trim();
 
-if (import.meta.env.PROD && !apiBaseUrl) {
-  throw new Error('VITE_API_URL is required in production.');
-}
+
 
 export const api = axios.create({
-  baseURL: apiBaseUrl || 'http://localhost:5000/api',
+  baseURL: apiBaseUrl || '/api',
   timeout: 8000
 });
 
@@ -105,3 +103,4 @@ api.request=((config:any)=>{
   inFlight.set(key,work as Promise<unknown>);
   return work;
 }) as typeof api.request;
+
