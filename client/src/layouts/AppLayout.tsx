@@ -1,4 +1,4 @@
-import {useEffect,useState} from 'react';
+﻿import {useEffect,useState} from 'react';
 import {NavLink,useNavigate,Outlet} from 'react-router-dom';
 import {LayoutDashboard,UserCircle,WalletCards,ArrowDownToLine,Boxes,Users,Gift,TicketPercent,ReceiptText,LifeBuoy,Settings,Menu,X,LogOut,ShieldCheck,Bell,History,MessageCircle} from 'lucide-react';
 import {useAuth} from '../context/AuthContext';
@@ -138,7 +138,7 @@ export default function AppLayout(){
                 <ShieldCheck size={18}/>
                 Information & Policies
               </span>
-              <span>{policiesOpen?'−':'+'}</span>
+              <span>{policiesOpen?'âˆ’':'+'}</span>
             </button>
 
             {policiesOpen&&(
@@ -161,6 +161,14 @@ export default function AppLayout(){
               Admin Panel
             </NavLink>
           )}
+
+        <button
+          className="logout"
+          onClick={handleLogout}
+        >
+          <LogOut size={18}/>
+          Logout
+        </button>
         </nav>
 
         {whatsappChannel&&(
@@ -175,13 +183,6 @@ export default function AppLayout(){
           </a>
         )}
 
-        <button
-          className="logout"
-          onClick={handleLogout}
-        >
-          <LogOut size={18}/>
-          Logout
-        </button>
 
       </aside>
 
@@ -225,7 +226,7 @@ export default function AppLayout(){
                 cursor:'pointer'
               }}
             >
-              © Return to Admin
+              Â© Return to Admin
             </button>
           </div>
         )}
@@ -259,7 +260,7 @@ export default function AppLayout(){
             </div>
             <div>
               <b>{user?.fullName||'Guest'}</b>
-              <small>ID: {user?.userId||'—'}</small>
+              <small>ID: {user?.userId||'â€”Â'}</small>
             </div>
           </div>
         </header>
@@ -385,7 +386,7 @@ export default function AppLayout(){
                 cursor:'pointer'
               }}
             >
-              I've Joined — Continue
+              I've Joined â€”Â Continue
             </button>
 
             <p
@@ -404,6 +405,7 @@ export default function AppLayout(){
     </div>
   );
 }
+
 
 
 
