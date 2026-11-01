@@ -287,6 +287,7 @@ export default function AppLayout(){
             style={{
               width:'100%',
               maxWidth:'460px',
+              position:'relative',
               background:'#fff',
               borderRadius:'24px',
               padding:'32px 26px',
@@ -294,6 +295,34 @@ export default function AppLayout(){
               boxShadow:'0 25px 70px rgba(0,0,0,0.35)'
             }}
           >
+            <button
+              type="button"
+              aria-label="Close WhatsApp popup"
+              onClick={()=>{
+                sessionStorage.setItem('tm_whatsapp_join_seen','1');
+                setShowWhatsAppJoin(false);
+              }}
+              style={{
+                position:'absolute',
+                top:'12px',
+                right:'14px',
+                width:'36px',
+                height:'36px',
+                border:'none',
+                borderRadius:'50%',
+                background:'#f3f4f6',
+                color:'#374151',
+                fontSize:'27px',
+                lineHeight:1,
+                cursor:'pointer',
+                display:'flex',
+                alignItems:'center',
+                justifyContent:'center'
+              }}
+            >
+              ×
+            </button>
+
             <div
               style={{
                 width:'72px',
