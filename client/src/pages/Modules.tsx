@@ -1277,7 +1277,7 @@ export function Support(){
           >
             <a
               className="btn"
-              href="https://whatsapp.com/channel/0029Vb8r8KN4dTnFwnDT2J0D"
+              href="https://whatsapp.com/channel/0029Vb8r8KN4dTnFwnDT2J0"
               target="_blank"
               rel="noreferrer"
             >

@@ -5,7 +5,7 @@ import {authService} from '../services';
 import {Button,Card,Field} from '../components/ui';
 import {ShieldCheck,MessageCircle,Eye,EyeOff} from 'lucide-react';
 
-const WHATSAPP_CHANNEL='https://whatsapp.com/channel/0029Vb8r8KN4dTnFwnDT2J0D';
+const WHATSAPP_CHANNEL='https://whatsapp.com/channel/0029Vb8r8KN4dTnFwnDT2J0';
 
 function AuthBox({title,subtitle,children}:{title:string;subtitle:string;children:ReactNode}){
   return <div className="auth-page"><Card className="auth-card"><div className="brand big"><span>TM</span><div><b>LTC ERA</b><small>Mine Today Ã¢â‚¬Â¢ Earn Tomorrow</small></div></div><div className="auth-trust"><ShieldCheck size={15}/> Secure account workspace</div><h1>{title}</h1><p>{subtitle}</p>{children}</Card></div>
