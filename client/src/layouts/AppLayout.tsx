@@ -1,4 +1,4 @@
-import {useEffect,useState} from 'react';
+﻿import {useEffect,useState} from 'react';
 import {NavLink,useNavigate,Outlet} from 'react-router-dom';
 import {LayoutDashboard,UserCircle,WalletCards,ArrowDownToLine,Boxes,Users,Gift,TicketPercent,ReceiptText,LifeBuoy,Settings,Menu,X,LogOut,ShieldCheck,Bell,History,MessageCircle} from 'lucide-react';
 import {useAuth} from '../context/AuthContext';
@@ -92,7 +92,6 @@ export default function AppLayout(){
           <span>TM</span>
           <div>
             <b>LTC ERA</b>
-            <small>Mine Today â€¢ Earn Tomorrow</small>
           </div>
           <button
             className="mobile-x"
@@ -139,7 +138,7 @@ export default function AppLayout(){
                 <ShieldCheck size={18}/>
                 Information & Policies
               </span>
-              <span>{policiesOpen?'−':'+'}</span>
+              <span>{policiesOpen?'âˆ’':'+'}</span>
             </button>
 
             {policiesOpen&&(
@@ -226,7 +225,7 @@ export default function AppLayout(){
                 cursor:'pointer'
               }}
             >
-              â†© Return to Admin
+              Ã¢â€ Â© Return to Admin
             </button>
           </div>
         )}
@@ -241,7 +240,6 @@ export default function AppLayout(){
 
           <div className="header-title">
             <span className="eyebrow">LTC ERA</span>
-            <h2>Mine Today â€¢ Earn Tomorrow</h2>
           </div>
 
           <button
@@ -261,7 +259,7 @@ export default function AppLayout(){
             </div>
             <div>
               <b>{user?.fullName||'Guest'}</b>
-              <small>ID: {user?.userId||'â€”'}</small>
+              <small>ID: {user?.userId||'Ã¢â‚¬â€'}</small>
             </div>
           </div>
         </header>
@@ -387,7 +385,7 @@ export default function AppLayout(){
                 cursor:'pointer'
               }}
             >
-              I've Joined â€” Continue
+              I've Joined Ã¢â‚¬â€ Continue
             </button>
 
             <p
@@ -406,5 +404,8 @@ export default function AppLayout(){
     </div>
   );
 }
+
+
+
 
 
