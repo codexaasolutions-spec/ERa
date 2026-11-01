@@ -16,3 +16,6 @@ _backup-*/
 
 # Payment proof uploads
 server/uploads/
+
+node_modules/
+
