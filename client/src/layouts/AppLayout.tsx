@@ -161,14 +161,6 @@ export default function AppLayout(){
               Admin Panel
             </NavLink>
           )}
-
-        <button
-          className="logout"
-          onClick={handleLogout}
-        >
-          <LogOut size={18}/>
-          Logout
-        </button>
         </nav>
 
         {whatsappChannel&&(
@@ -405,6 +397,7 @@ export default function AppLayout(){
     </div>
   );
 }
+
 
 
 
