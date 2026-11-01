@@ -86,7 +86,7 @@ export default function AppLayout(){
         onClick={()=>setOpen(false)}
       />
 
-      <aside className={open?'sidebar open':'sidebar'} style={{height:"100dvh",overflow:"hidden",display:"flex",flexDirection:"column"}}>
+      <aside className={open?'sidebar open':'sidebar'} style={{height:"100vh",overflowY:"auto",overflowX:"hidden",overscrollBehavior:"contain"}}>
 
         <div className="brand">
           <span>TM</span>

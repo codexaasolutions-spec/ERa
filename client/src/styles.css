@@ -1995,3 +1995,9 @@ tbody tr:hover {
 .sidebar nav{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important}
 .sidebar .logout{position:sticky!important;bottom:0!important;flex:0 0 auto!important;flex-shrink:0!important;margin-top:auto!important;display:flex!important;visibility:visible!important;opacity:1!important;min-height:48px!important;z-index:50!important;background:#050b12!important}
 
+
+/* Sidebar and logout scroll together */
+.sidebar{height:100vh!important;overflow-y:auto!important;overflow-x:hidden!important;display:flex!important;flex-direction:column!important}
+.sidebar nav{flex:0 0 auto!important;min-height:auto!important;overflow:visible!important}
+.sidebar .logout{position:static!important;bottom:auto!important;margin-top:12px!important;flex-shrink:0!important;display:flex!important;visibility:visible!important;opacity:1!important}
+
