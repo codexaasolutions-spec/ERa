@@ -1,4 +1,4 @@
-﻿import express from 'express';
+import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -74,6 +74,10 @@ if (!clientDist) {
 
 app.get(/.*/, (req, res, next) => {
   if (req.path.startsWith('/api')) return next();
+
+  if (req.path.startsWith('/assets/')) {
+    return res.status(404).send('Frontend asset not found');
+  }
 
   if (clientDist && fs.existsSync(path.join(clientDist, 'index.html'))) {
     return res.sendFile(path.join(clientDist, 'index.html'));
