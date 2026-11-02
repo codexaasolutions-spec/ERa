@@ -1,4 +1,4 @@
-﻿import {FormEvent,ReactNode,useEffect,useRef,useState} from 'react';
+import {FormEvent,ReactNode,useEffect,useRef,useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useAuth} from '../context/AuthContext';
 import {depositService,withdrawalService,transactionService,teamService,rewardService,promoService,settingsService,notificationService,supportService,paymentMethodService,packageService,userService,telegramService,dashboardService} from '../services';
@@ -1295,7 +1295,7 @@ export function Support(){
 
            <a
   className="btn"
-  href="https://www.facebook.com/share/p/1DTq68z9QF/"
+  href="https://m.me/61595821664774"
   target="_blank"
   rel="noreferrer"
 >
