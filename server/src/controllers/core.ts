@@ -1026,17 +1026,6 @@ export async function verifyDeposit(
             // performs the single wallet credit. Never credit again here.
           }
 
-          // Ensure referral commissions are also created for completed
-          // deposits recovered through this idempotent path.
-          // createCommissions() is idempotent, so existing commissions
-          // will not be duplicated.
-          await createCommissions(
-            String(done.userId),
-            Number(done.amount),
-            String(done.transactionId),
-            session
-          );
-
           let purchase =
             await PackagePurchase.findOne({
               paymentId:
@@ -1127,6 +1116,12 @@ export async function verifyDeposit(
                 }
               )
             )[0];
+            await createCommissions(
+              String(purchase.userId),
+              Number(purchase.packageAmount ?? done.amount),
+              `PACKAGE-${String(purchase._id)}`,
+              session
+            );
 
             await Notification.create(
               [{
@@ -1225,15 +1220,6 @@ export async function verifyDeposit(
         session
       );
 
-      // Distribute referral commissions from the completed deposit.
-      // Idempotency is handled inside createCommissions().
-      await createCommissions(
-        String(d.userId),
-        Number(d.amount),
-        String(d.transactionId),
-        session
-      );
-
       const intervalMs =
         Math.max(
           1,
@@ -1324,6 +1310,12 @@ export async function verifyDeposit(
             }
           )
         )[0];
+        await createCommissions(
+          String(purchase.userId),
+          Number(purchase.packageAmount ?? d.amount),
+          `PACKAGE-${String(purchase._id)}`,
+          session
+        );
 
         await Notification.create(
           [{
@@ -6373,5 +6365,7 @@ export async function adminUpdateUserStatus(
     user: updatedUser
   });
 }
+
+
 
 

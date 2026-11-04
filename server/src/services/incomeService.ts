@@ -1,4 +1,4 @@
-import {
+﻿import {
   PackagePurchase,
   Package,
   Transaction,
@@ -10,7 +10,6 @@ import {
 } from './ledger.js';
 
 import type {ClientSession} from 'mongoose';
-import { createCommissions } from './referralService.js';
 import { getSettings } from './settingsService.js';
 
 export async function processCycle(p: { _id: unknown }) {
@@ -139,15 +138,6 @@ export async function processCycle(p: { _id: unknown }) {
       );
 
     if (!advanced) return current;
-
-    if (income) {
-      await createCommissions(
-        String(advanced.userId),
-        Number(income.amount || 0),
-        String(income.transactionId ?? ''),
-        session
-      );
-    }
 
     if (cycleNumber >= duration) {
       advanced.status = 'EXPIRED';
